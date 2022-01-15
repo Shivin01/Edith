@@ -12,6 +12,8 @@ import {
 import Login from './routers/login';
 import SignUp from './routers/signup';
 import Profile from './routers/profile';
+import ClientDetails from './routers/client_details';
+import Leave from './routers/leave';
 
 
 ReactDOM.render(
@@ -22,6 +24,8 @@ ReactDOM.render(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
       <Route path="profile" element={<Profile />} />
+      <Route path="employee_info" element={<ClientDetails />} />
+      <Route path="leave" element={<Leave />} />
     </Routes>
   </BrowserRouter>
   </React.StrictMode>,
