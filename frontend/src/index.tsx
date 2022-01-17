@@ -1,33 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
-import Login from './routers/login';
-import SignUp from './routers/signup';
-import Profile from './routers/profile';
-import ClientDetails from './routers/client_details';
-import Leave from './routers/leave';
-
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-  <BrowserRouter>
-  <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<SignUp />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="employee_info" element={<ClientDetails />} />
-      <Route path="leave" element={<Leave />} />
-    </Routes>
-  </BrowserRouter>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
