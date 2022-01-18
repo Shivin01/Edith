@@ -30,14 +30,27 @@ function AuthProvider(props: any): any {
     setData,
   } = useAsync()
 
+  const r = () => {
+
+  }
+
+  // save in auth provoder and windows localstorgae
   const login = React.useCallback(
-    form => auth.login(form).then(user => setData(user)),
+    form => {
+
+      // api call 
+      auth.login(form).then(user => setData(user))
+    },
     [setData],
   )
+
+  // save in auth provoder and windows localstorgae
   const register = React.useCallback(
     form => auth.register(form).then(user => setData(user)),
     [setData],
   )
+
+  // delete from auth provoder and windows localstorgae
   const logout = React.useCallback(() => {
     auth.logout()
     // queryCache.clear()
@@ -81,7 +94,7 @@ function useClient(): any {
   const { user } = useAuth()
   const token = user?.token
   return React.useCallback(
-    (endpoint: any, config: any) => client(endpoint, {...config, token}),
+    (endpoint: string, config: any) => client(endpoint, {...config, token}),
     [token],
   )
 }

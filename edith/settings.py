@@ -148,7 +148,7 @@ JWT_AUTH = {
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%s000',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
