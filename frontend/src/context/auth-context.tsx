@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import {queryCache} from 'react-query'
 import * as auth from '../auth-provider'
 import {client} from '../utils/api-client'
 import {useAsync} from '../utils/hooks'
-import { ContextData } from "../types";
+import { ContextData, UserData } from "../types";
 
 const defaultValue: ContextData = {
   user: {
@@ -18,18 +18,19 @@ const AuthContext = React.createContext<ContextData>(defaultValue)
 AuthContext.displayName = 'AuthContext'
 
 function AuthProvider(props: any): any {
-  const {
-    data: user,
-    status,
-    error,
-    isLoading,
-    isIdle,
-    isError,
-    isSuccess,
-    run,
-    setData,
-  } = useAsync()
+  // const {
+  //   data: user,
+  //   status,
+  //   error,
+  //   isLoading,
+  //   isIdle,
+  //   isError,
+  //   isSuccess,
+  //   run,
+  //   setData,
+  // } = useAsync()
 
+  const [user, setData] = useState<UserData | null>({} as UserData);
   const r = () => {
 
   }
@@ -41,13 +42,13 @@ function AuthProvider(props: any): any {
       // api call 
       auth.login(form).then(user => setData(user))
     },
-    [setData],
+    [],
   )
 
   // save in auth provoder and windows localstorgae
   const register = React.useCallback(
     form => auth.register(form).then(user => setData(user)),
-    [setData],
+    [],
   )
 
   // delete from auth provoder and windows localstorgae
@@ -55,7 +56,7 @@ function AuthProvider(props: any): any {
     auth.logout()
     // queryCache.clear()
     setData(null)
-  }, [setData])
+  }, [])
 
   const value = React.useMemo(
     () => ({user, login, logout, register}),
@@ -73,13 +74,13 @@ function AuthProvider(props: any): any {
   //   return <FullPageErrorFallback error={error} />
   // }
 
-  if (isSuccess) {
-    return  ( 
-    < AuthContext.Provider value={value} {...props} />      
-  );
-  }
+  // if (isSuccess) {
+  return  ( 
+  < AuthContext.Provider value={value} {...props} />      
+);
+  // }
 
-  throw new Error(`Unhandled status: ${status}`)
+  // throw new Error(`Unhandled status: ${status}`)
 }
 
 function useAuth(): ContextData {
