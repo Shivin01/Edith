@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Login from "./pages/Login/Login";
 import SignUp from "./routers/signup";
-import React from "react";
+import React, {Fragment} from "react";
 import Layout from "./components/layout/Layout"
 import '../styles/theme.scss'
 import {useAuth} from "./context/auth-context";
@@ -16,7 +16,9 @@ const PrivateRoute = ({children}) => {
 function App() {
   return (
     <Container>
+    
       <Routes>
+      <Fragment>
         <Route path="/" element={
           <PrivateRoute>
             <Layout/>
@@ -24,7 +26,8 @@ function App() {
         } />
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<SignUp/>}/>
-      </Routes>
+        </Fragment>
+      </Routes>      
     </Container>
   );
 }
