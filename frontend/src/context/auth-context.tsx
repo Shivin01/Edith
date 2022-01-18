@@ -61,8 +61,9 @@ function AuthProvider(props: any): any {
   // }
 
   if (isSuccess) {
-    return      
-< AuthContext.Provider value={value} {...props} />      
+    return  ( 
+    < AuthContext.Provider value={value} {...props} />      
+  );
   }
 
   throw new Error(`Unhandled status: ${status}`)

@@ -14,7 +14,7 @@ const PrivateRoute = ({element: Element, ...rest}) => {
     // Show the component only when the user is logged in
     // Otherwise, redirect the user to /signin page
     // @ts-ignore
-    <Route {...rest} render={props => (
+    < Route {...rest} render={props => (
       user?.token ?
         <Element {...props} />
         : <Navigate to="/signin" />
