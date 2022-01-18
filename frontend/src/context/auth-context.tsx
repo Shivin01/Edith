@@ -61,7 +61,8 @@ function AuthProvider(props: any): any {
   // }
 
   if (isSuccess) {
-    return <AuthContext.Provider value={value} {...props} />
+    return      
+< AuthContext.Provider value={value} {...props} />      
   }
 
   throw new Error(`Unhandled status: ${status}`)
@@ -76,10 +77,10 @@ function useAuth(): ContextData {
 }
 
 function useClient(): any {
-  const {user} = useAuth()
+  const { user } = useAuth()
   const token = user?.token
   return React.useCallback(
-    (endpoint, config) => client(endpoint, {...config, token}),
+    (endpoint: any, config: any) => client(endpoint, {...config, token}),
     [token],
   )
 }
