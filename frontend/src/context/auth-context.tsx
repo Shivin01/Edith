@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-// import {queryCache} from 'react-query'
 import * as auth from '../auth-provider'
 import {client} from '../utils/api-client'
 import {useAsync} from '../utils/hooks'
-import { ContextData, UserData } from "../types";
+import { ContextData, UserData, UserDetails } from "../types";
+import axios from "axios";
+import { loginUser } from "../api"
+import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query'
+
 
 const defaultValue: ContextData = {
   user: {
     token: ''
-  },
+  },  
   login: auth.login,
   logout: auth.logout,
   register: auth.register
@@ -17,37 +20,31 @@ const defaultValue: ContextData = {
 const AuthContext = React.createContext<ContextData>(defaultValue)
 AuthContext.displayName = 'AuthContext'
 
-function AuthProvider(props: any): any {
-  // const {
-  //   data: user,
-  //   status,
-  //   error,
-  //   isLoading,
-  //   isIdle,
-  //   isError,
-  //   isSuccess,
-  //   run,
-  //   setData,
-  // } = useAsync()
+function AuthProvider(): JSX.Element {
 
-  const [user, setData] = useState<UserData | null>({} as UserData);
-  const r = () => {
+  const {mutate: loginMutate} = useMutation(loginUser)
 
+  const [user, setUser] = useState<UserData | null>({} as UserData);
+
+
+  const login = ({username, password}: UserDetails ) => {
+
+    const l = loginMutate({username, password}, {
+        onError: (error) => {
+          console.log(error);
+        },        
+        onSuccess: (data) => {
+          console.log(data);
+          // useHistory()
+        },
+   })
+
+   console.log(l);
   }
 
   // save in auth provoder and windows localstorgae
-  const login = React.useCallback(
-    form => {
-
-      // api call 
-      auth.login(form).then(user => setData(user))
-    },
-    [],
-  )
-
-  // save in auth provoder and windows localstorgae
   const register = React.useCallback(
-    form => auth.register(form).then(user => setData(user)),
+    form => auth.register(form).then(user => setUser(user)),
     [],
   )
 
@@ -55,32 +52,16 @@ function AuthProvider(props: any): any {
   const logout = React.useCallback(() => {
     auth.logout()
     // queryCache.clear()
-    setData(null)
+    setUser(null)
   }, [])
 
   const value = React.useMemo(
     () => ({user, login, logout, register}),
     [login, logout, register, user],
   )
-
-  // if (isLoading || isIdle) {
-  //   // TODO: return spinner
-  //   return (
-  //     <span>spinner</span>
-  //   )
-  // }
-  //
-  // if (isError) {
-  //   return <FullPageErrorFallback error={error} />
-  // }
-
-  // if (isSuccess) {
   return  ( 
-  < AuthContext.Provider value={value} {...props} />      
+  < AuthContext.Provider value={value} /> 
 );
-  // }
-
-  // throw new Error(`Unhandled status: ${status}`)
 }
 
 function useAuth(): ContextData {
@@ -91,13 +72,13 @@ function useAuth(): ContextData {
   return context
 }
 
-function useClient(): any {
-  const { user } = useAuth()
-  const token = user?.token
-  return React.useCallback(
-    (endpoint: string, config: any) => client(endpoint, {...config, token}),
-    [token],
-  )
-}
+// function useClient(): any {
+//   const { user } = useAuth()
+//   const token = user?.token
+//   return React.useCallback(
+//     (endpoint: string, config: any) => client(endpoint, {...config, token}),
+//     [token],
+//   )
+// }
 
 export {AuthProvider, useAuth, useClient}

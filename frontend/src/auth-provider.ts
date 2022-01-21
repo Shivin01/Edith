@@ -1,5 +1,6 @@
 import { UserDetails } from "./types"
 
+
 const localStorageKey = '__auth_provider_token__'
 
 async function getToken() {

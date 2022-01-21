@@ -32,7 +32,8 @@ export default function Login() {
             Don&#39;t have an account? <Link to="/signup">Sign up now!</Link>
           </p>
           <Form onSubmit={handleSubmit((data) => {
-            console.log({data});
+            console.log(data);
+            login({username: data.username, password: data.password});
             // react query ( 200 -> auth context )
             // username and password.
           })}>
