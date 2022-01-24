@@ -7,6 +7,8 @@ import Col from "react-bootstrap/Col";
 import Widget from '../../components/Widget';
 import s from './Login.module.scss';
 import {Link} from "react-router-dom";
+import {useAuth} from '../../context/auth-context';
+
 
 export default function Login() {
 
@@ -16,6 +18,8 @@ export default function Login() {
       password: ""
     }
   })
+
+  const { login } = useAuth()
 
   return (
     <Row className="d-flex justify-content-center">
@@ -28,7 +32,10 @@ export default function Login() {
             Don&#39;t have an account? <Link to="/signup">Sign up now!</Link>
           </p>
           <Form onSubmit={handleSubmit((data) => {
-            console.log({data});
+            console.log(data);
+            login({username: data.username, password: data.password});
+            // react query ( 200 -> auth context )
+            // username and password.
           })}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>

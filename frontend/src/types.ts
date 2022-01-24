@@ -4,6 +4,10 @@ export interface UserDetails {
   password: string
 }
 
+export type UserData = {
+  token: string
+}
+
 export interface ContextData {
   user: {
     token: string

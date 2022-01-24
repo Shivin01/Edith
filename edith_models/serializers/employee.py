@@ -8,16 +8,16 @@ from .base import BaseSerializer, TimestampField
 
 
 class EmployeeRegisterSerializer(BaseSerializer, RegisterSerializer):
-    password = serializers.CharField(read_only=True)
+    # password = serializers.CharField(read_only=True)
 
-    def save(self, request):
-        self.instance = request.data
-        self.is_valid(raise_exception=True)
-        self.validated_data.pop('password1')
-        self.validated_data.pop('password2')
-        user = self.create(self.validated_data)
-        user.save()
-        return user
+    # def save(self, request):
+    #     self.instance = request.data
+    #     self.is_valid(raise_exception=True)
+    #     self.validated_data.pop('password1')
+    #     self.validated_data.pop('password2')
+    #     user = self.create(self.validated_data)
+    #     user.save()
+    #     return user
 
     class Meta:
         model = Employee
