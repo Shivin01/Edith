@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
     'corsheaders',
+    'employee',
+    'announcement',
+    'client',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

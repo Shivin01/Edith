@@ -1,4 +1,3 @@
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import {useForm} from "react-hook-form";
 import Form from "react-bootstrap/Form";
@@ -19,7 +18,7 @@ export default function Login() {
     }
   })
 
-  const { login } = useAuth()
+  const {login} = useAuth()
 
   return (
     <Row className="d-flex justify-content-center">

@@ -1,45 +1,49 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import * as auth from '../auth-provider'
 import {client} from '../utils/api-client'
 import {useAsync} from '../utils/hooks'
-import { ContextData, UserData, UserDetails } from "../types";
+import {AuthContextData, UserData, UserDetails} from "../types";
 import axios from "axios";
-import { loginUser } from "../api"
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query'
+import {loginUser} from "../api"
+import {QueryClient, QueryClientProvider, useQuery, useMutation} from 'react-query'
 
 
-const defaultValue: ContextData = {
+const defaultValue: AuthContextData = {
   user: {
     token: ''
-  },  
-  login: auth.login,
-  logout: auth.logout,
-  register: auth.register
+  },
+  login: (data: UserDetails) => {},
+  logout: () => {},
+  register: (data: any) => new Promise((resolve) => resolve())
 }
 
-const AuthContext = React.createContext<ContextData>(defaultValue)
+const AuthContext = React.createContext<AuthContextData>(defaultValue)
 AuthContext.displayName = 'AuthContext'
 
-function AuthProvider(): JSX.Element {
+type AuthProviderProps = {
+  children: JSX.Element
+}
+
+function AuthProvider(props: AuthProviderProps): JSX.Element {
 
   const {mutate: loginMutate} = useMutation(loginUser)
 
   const [user, setUser] = useState<UserData | null>({} as UserData);
 
 
-  const login = ({username, password}: UserDetails ) => {
+  const login = ({username, password}: UserDetails) => {
 
     const l = loginMutate({username, password}, {
-        onError: (error) => {
-          console.log(error);
-        },        
-        onSuccess: (data) => {
-          console.log(data);
-          // useHistory()
-        },
-   })
+      onError: (error) => {
+        console.log(error);
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        // useHistory()
+      },
+    })
 
-   console.log(l);
+    console.log(l);
   }
 
   // save in auth provoder and windows localstorgae
@@ -59,12 +63,12 @@ function AuthProvider(): JSX.Element {
     () => ({user, login, logout, register}),
     [login, logout, register, user],
   )
-  return  ( 
-  < AuthContext.Provider value={value} /> 
-);
+  return (
+    <AuthContext.Provider value={value} {...props} />
+  );
 }
 
-function useAuth(): ContextData {
+function useAuth(): AuthContextData {
   const context = React.useContext(AuthContext)
   if (context === undefined) {
     throw new Error(`useAuth must be used within a AuthProvider`)
@@ -81,4 +85,4 @@ function useAuth(): ContextData {
 //   )
 // }
 
-export {AuthProvider, useAuth, useClient}
+export {AuthProvider, useAuth}

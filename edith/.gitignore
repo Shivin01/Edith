@@ -1,7 +1,0 @@
-node_modules
-postgres_data
-.idea
-.vscode
-__pycache__
-venv
-

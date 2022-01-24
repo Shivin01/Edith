@@ -4,4 +4,4 @@ postgres_data
 .vscode
 __pycache__
 venv
-
+*/**/.DS_Store

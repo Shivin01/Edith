@@ -12,8 +12,7 @@ class TimestampField(serializers.DateTimeField):
         :param value: the DateTime value
         :return: a UTC timestamp integer
         """
-        result = super(TimestampField, self).to_representation(value)
-        return result.timestamp()
+        return value.timestamp()
 
     def to_internal_value(self, value):
         """
@@ -21,8 +20,7 @@ class TimestampField(serializers.DateTimeField):
         :param value: the timestamp value
         :return: a django DateTime value
         """
-        converted = datetime.fromtimestamp(float('%s' % value))
-        return super(TimestampField, self).to_representation(converted)
+        return datetime.fromtimestamp(int(value))
 
 
 class ReadOnlyTimestampField(serializers.ReadOnlyField):

@@ -1,9 +1,9 @@
 from builtins import object
-from edith_models.models import Holiday
+from edith_models.models import HolidayList
 from .base import BaseSerializer
 
 
-class HolidaySerializer(BaseSerializer):
+class HolidayListSerializer(BaseSerializer):
     class Meta(object):
-        model = Holiday
+        model = HolidayList
         fields = '__all__'

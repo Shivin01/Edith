@@ -36,7 +36,6 @@ class Leave(Base):
     )
     start_date_time = models.DateTimeField()
     stop_date_time = models.DateTimeField()
-    type_of_leave = models.CharField(max_length=Base.MAX_LENGTH_SMALL)
     employee = models.ForeignKey(Employee, related_name="leaves", on_delete=models.CASCADE)
 
 
