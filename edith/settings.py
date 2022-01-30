@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'employee',
     'announcement',
     'client',
-    'django_filters'
+    'django_filters',
+    'allauth.socialaccount'
 ]
 
 MIDDLEWARE = [

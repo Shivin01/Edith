@@ -56,17 +56,13 @@ class EmployeeMinimalSerializer(BaseSerializer):
 
 class EmployeeSerializer(BaseSerializer):
     departments = serializers.SerializerMethodField(read_only=True)
-    image = serializers.CharField()
 
     def get_departments(self, obj) -> List[str]:
         departments = []
         for dep in obj.departments.all():
             departments.append(dep.name)
-        return departments
-
-    def get_image(self, obj):
-        return obj.image if obj.image else ""
+        return departments    
 
     class Meta:
         model = Employee
-        fields = '__all__'
+        exclude = ('password', )

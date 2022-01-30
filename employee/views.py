@@ -1,3 +1,4 @@
+import http
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -39,12 +40,11 @@ class IsAdminUserAuthenticated(IsAuthenticated):
         return bool(request.user and request.user.is_authenticated and request.user.designation.upper() in ['ADMIN', 'HR', 'MANAGER'])
 
 
-class EmployeeAdminViewSet(mixins.UpdateModelMixin,
-                           mixins.DestroyModelMixin,
-                           viewsets.GenericViewSet):
+class EmployeeAdminViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     permission_classes = (IsAuthenticated, )
+    http_method_names = ['delete', 'patch', 'put']
 
 
 class EmployeeMinimalViewSet(viewsets.ReadOnlyModelViewSet):
