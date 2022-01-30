@@ -6,9 +6,17 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins
 
-from edith_models.models import Employee, Resignation, Leave, Bonus, Department
-from edith_models.serializers import EmployeeSerializer, ResignationSerializer, LeaveSerializer, BonusSerializer
+from edith_models.models import Employee, Resignation, Leave, Bonus, Attendance, HolidayList
+from edith_models.serializers import (
+    EmployeeSerializer,
+    ResignationSerializer,
+    LeaveSerializer,
+    BonusSerializer,
+    EmployeeMinimalSerializer,
+    AttendanceSerializer,
+)
 
 
 class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -17,6 +25,36 @@ class EmployeeViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = (IsAuthenticated, )
+    filterset_fields = ['created_at', 'slack_id']
+    search_fields = ['employee__name']
+
+
+class IsAdminUserAuthenticated(IsAuthenticated):
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated and request.user.designation.upper() in ['ADMIN', 'HR', 'MANAGER'])
+
+
+class EmployeeAdminViewSet(mixins.UpdateModelMixin,
+                           mixins.DestroyModelMixin,
+                           viewsets.GenericViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    permission_classes = (IsAuthenticated, )
+
+
+class EmployeeMinimalViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` actions.
+    """
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeMinimalSerializer
+    filterset_fields = ['slack_id']
+    search_fields = ['employee__name']
 
 
 class ResignationViewSet(viewsets.ModelViewSet):
@@ -36,6 +74,10 @@ class LeaveViewSet(viewsets.ModelViewSet):
     queryset = Leave.objects.all()
     serializer_class = LeaveSerializer
     http_method_names = ['get', 'post']
+
+    def get_queryset(self):
+        employees = Employee.objects.filter(client=self.request.user.client)
+        return Leave.objects.filter(employee__in=[employee.id for employee in employees], approved_by=not None)
 
 
 class BonusViewSet(viewsets.ModelViewSet):
@@ -107,3 +149,49 @@ class ApprovalBonusViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except DjangoValidationError as e:
             return Response({"Message": ";".join(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmployeeAttendanceViewSet(viewsets.ModelViewSet):
+    serializer_class = AttendanceSerializer
+    permission_classes = (IsAuthenticated, )
+    http_method_names = ["get", "post"]
+    filterset_fields = ['employee']
+
+    def get_queryset(self):
+        return Attendance.objects.filter(employee=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        return super(EmployeeAttendanceViewSet, self).create(request, *args, **kwargs)
+
+
+class AdminAttendanceViewSet(viewsets.ModelViewSet):
+    serializer_class = AttendanceSerializer
+    permission_classes = (IsAuthenticated, )
+    http_method_names = ["get", "post"]
+    filterset_fields = ['employee']
+
+    def get_queryset(self):
+        employees = Employee.objects.filter(client=self.request.user.client)
+        return Attendance.objects.filter(employee__in=[employee.id for employee in employees])
+
+
+class LeaveApprovalViewSet(viewsets.ModelViewSet):
+    serializer_class = LeaveSerializer
+    permission_classes = (IsAdminUserAuthenticated, )
+    http_method_names = ["get", "patch"]
+
+    def get_queryset(self):
+        employees = Employee.objects.filter(client=self.request.user.client)
+        return Leave.objects.filter(employee__in=[employee.id for employee in employees], approved_by=None)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print(instance.__dict__)
+        if instance.approved_by:
+            return Response(self.get_serializer(instance))
+        request.data['approved_by'] = request.user.id
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)

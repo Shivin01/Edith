@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from datetime import date
 from datetime import timedelta
 
-from edith_models.models import Employee, HolidayList
-from edith_models.serializers import HolidayListSerializer
+from edith_models.models import Employee
+from edith_models.serializers import AnnouncementSerializer
 
 
 class CelebrationViewSet(viewsets.ViewSet):
@@ -69,6 +69,11 @@ class NewsFeedViewSet(viewsets.ViewSet):
         return Response(employees)
 
 
-class HolidayListViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = HolidayList.objects.all()
-    serializer_class = HolidayListSerializer
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    """
+    Announcement viewset
+    """
+    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    serializer_class = AnnouncementSerializer
+    http_method_names = ["get", "post"]

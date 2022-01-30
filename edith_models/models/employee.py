@@ -101,8 +101,8 @@ class Employee(AbstractBaseUser, Base):
     )
     joining_date = models.DateField(null=True)
     first_name = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM)
-    middle_name = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM, null=True)
-    last_name = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM, null=True)
+    middle_name = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM, null=True, blank=True)
+    last_name = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM, null=True, blank=True)
     birth_date = models.DateField(null=True)
     phone_number = models.CharField(validators=[phone_regex], max_length=17)
     email = models.EmailField(max_length=Base.MAX_LENGTH_MEDIUM)
@@ -121,6 +121,7 @@ class Employee(AbstractBaseUser, Base):
     skills = models.ManyToManyField('Skill', related_name='employee', blank=True)
     client = models.ForeignKey(Client, related_name="employees", on_delete=models.CASCADE, blank=True, null=True)
     resigned_date = models.DateField(null=True, blank=True)
+    slack_id = models.CharField(max_length=Base.MAX_LENGTH_MEDIUM, unique=True, null=True, blank=True)
     soft_delete = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'

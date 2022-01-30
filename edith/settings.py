@@ -17,7 +17,6 @@ import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ SECRET_KEY = 'django-insecure-u@@zaxpcdw-10%+4@@rche)0l0*p%aa5d7==2+^a$#a047=(v8
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -52,6 +50,7 @@ INSTALLED_APPS = [
     'announcement',
     'client',
     'django_filters',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -79,12 +78,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
     },
 ]
 
 WSGI_APPLICATION = 'edith.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -124,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -151,6 +151,8 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
+JWT_ALLOW_REFRESH = True
+
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%s000',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -161,6 +163,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 STATIC_URL = '/static/'
@@ -187,21 +190,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
-AUTHENTICATION_BACKENDS = ('edith.authentication.EmailBackend', )
-
+AUTHENTICATION_BACKENDS = ('edith.authentication.EmailBackend',)
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "edith_models.serializers.EmployeeRegisterSerializer"
 }
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_METHODS = (
-    'GET',
-    'POST',
-    'PUT',
-    'PATCH',
-    'DELETE',
-    'OPTIONS'
-)
-CORS_ALLOW_CREDENTIALS = True
-

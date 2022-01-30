@@ -23,8 +23,9 @@ class EmployeeRegisterSerializer(BaseSerializer, RegisterSerializer):
         fields = "__all__"
 
 
-class EmployeeSerializer(BaseSerializer):
+class EmployeeMinimalSerializer(BaseSerializer):
     departments = serializers.SerializerMethodField(read_only=True)
+    image = serializers.CharField()
 
     def get_departments(self, obj) -> List[str]:
         departments = []
@@ -32,9 +33,14 @@ class EmployeeSerializer(BaseSerializer):
             departments.append(dep.name)
         return departments
 
+    def get_image(self, obj):
+        return obj.image if obj.image else ""
+
     class Meta:
         model = Employee
         fields = (
+            'slack_id',
+            'username',
             'first_name',
             'middle_name',
             'last_name',
@@ -44,6 +50,23 @@ class EmployeeSerializer(BaseSerializer):
             'image',
             'gender',
             'skills',
-            'join_date',
             'departments',
         )
+
+
+class EmployeeSerializer(BaseSerializer):
+    departments = serializers.SerializerMethodField(read_only=True)
+    image = serializers.CharField()
+
+    def get_departments(self, obj) -> List[str]:
+        departments = []
+        for dep in obj.departments.all():
+            departments.append(dep.name)
+        return departments
+
+    def get_image(self, obj):
+        return obj.image if obj.image else ""
+
+    class Meta:
+        model = Employee
+        fields = '__all__'

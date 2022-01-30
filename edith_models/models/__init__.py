@@ -8,3 +8,4 @@ from .leave import Leave
 from .resignation import Resignation
 from .skill import Skill
 from .base import Base
+from .attendance import Attendance

@@ -11,4 +11,9 @@ services:
     - "5432:5432"
     volumes:
     - ./postgres_data:/var/lib/postgresql/data
+  jenkins:
+    image: jenkinsci/blueocean
+    container_name: jenkins
+    ports:
+      - "8080:8080"
 

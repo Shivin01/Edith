@@ -37,5 +37,6 @@ class Leave(Base):
     start_date_time = models.DateTimeField()
     stop_date_time = models.DateTimeField()
     employee = models.ForeignKey(Employee, related_name="leaves", on_delete=models.CASCADE)
+    approved_by = models.ForeignKey(Employee, related_name="approved_leaves", on_delete=models.SET_NULL, null=True)
 
 

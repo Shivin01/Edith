@@ -1,0 +1,41 @@
+slack:
+  token: xoxb-2928575696436-2982197883351-h6aXe1ibmRyzrDwFx00h82f7
+  socket_token: xapp-1-A030LFTMK0Q-2996842725363-04c700e8dd3d7441cfc7c0f61c59919682e832bcf9eed63dbc2ea2a3e565cdbc
+  debug: true
+
+jenkins:
+  host: "http://localhost:8080"
+  username: admin
+  password: admin
+  jobs:
+    test:
+      parameters:
+        - name: BRANCH
+          default: master
+          type: string
+
+crons:
+#  - schedule: "* * * * *"
+#    channel: "#devops"
+#    commands:
+#      - trigger job test
+#      - ping
+#  - schedule: "0 10 * * *"
+#    channel: "#devops"
+#    commands:
+#      - weather
+
+open_weather:
+  api_key: a8c44e038e53815ee892e48dcdca2c3e
+  location: Bengaluru
+
+logger:
+  level: debug
+  file: ./bot.log
+
+timezone: UTC
+
+server:
+  base_url: "http://localhost:8000"
+  timeout: 10
+  max_conns_per_host: 3
