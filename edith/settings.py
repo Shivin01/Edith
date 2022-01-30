@@ -49,8 +49,7 @@ INSTALLED_APPS = [
     'employee',
     'announcement',
     'client',
-    'django_filters',
-    'rest_framework_swagger',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
