@@ -68,7 +68,4 @@ settings:
 
 
 # Usage
-As slack user, you just have to send a private message to the bot user/app containing the command to execute.
-Additionally you can execute bot commands in channels by prefix your command with @bot_name, e.g. `@slack-bot start job DailyDeployment`
-
 **Note:** You have to invite the bot into the channel to be able to handle commands.
