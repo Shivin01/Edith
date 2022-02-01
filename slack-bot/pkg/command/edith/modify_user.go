@@ -26,7 +26,7 @@ func (c *modifyUserCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewManagerMatcher(
 		c.SlackClient,
 		matcher.NewGroupMatcher(
-			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> designation (?P<designation>hr|admin|dev|manager)`, c.modifyDesignation),
+			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> designation (?P<designationhr|sales|dev|admin|manager)`, c.modifyDesignation),
 			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> birthdate (?P<date>\d{4}-\d{2}-\d{2})`, c.modifyBirthDate),
 		),
 		true,
@@ -102,7 +102,7 @@ func (c *modifyUserCommand) GetHelp() []bot.Help {
 			Category: category,
 		},
 		{
-			Command:     "modify user @username birthdate <birthdate>",
+			Command:     "modify user @username birthdate <YYYY-MM-DD>",
 			Description: "modify existing user",
 			Examples: []string{
 				"modify user @jarvis birthdate 1995-04-20",
