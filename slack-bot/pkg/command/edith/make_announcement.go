@@ -48,7 +48,7 @@ func (c *makeAnnouncementCommand) run(match matcher.Result, message msg.Message)
 		return
 	}
 	c.SlackClient.SendMessage(message, "Successfully added response, users will see in #devops channel.")
-	channelID, _ := client.GetChannelIDAndName("#devops")
+	channelID, _ := client.GetChannelIDAndName("#general")
 	c.SlackClient.AddReaction("✅", message)
 	c.SlackClient.NewPostMessage(message, channelID, fmt.Sprintf(":tada: *New Announcement by* _%s_ :tada:\n\n*Type:* %s\n*Details:* %s\n", message.DBUser.FullName, res.Type, res.Detail))
 }
