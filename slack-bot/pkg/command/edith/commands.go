@@ -56,9 +56,6 @@ func GetCommands(base bot.BaseCommand, cfg *config.Server) bot.Commands {
 		newLeaveRequestCommand(edithBase),
 		newLeaveListCommand(edithBase),
 		newLeaveApproveCommand(edithBase),
-
-		// Extra commands
-		NewHolidayCommand(edithBase),
 	)
 
 	return commands
