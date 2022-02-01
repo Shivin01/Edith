@@ -79,7 +79,7 @@ func (c *leaveRequestCommand) run(match matcher.Result, message msg.Message) {
 func (c *leaveRequestCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "appy leave <YYYY-MM-DD> <days> <casual|sick|maternity> <full_day|half_day|restricted>",
+			Command:     "apply leave <YYYY-MM-DD> <days> <casual|sick|maternity> <full_day|half_day|restricted>",
 			Description: "apply leaves, cancel leave or modify existing leave",
 			Examples: []string{
 				"apply leave 2022-02-12 3 sick full_day",

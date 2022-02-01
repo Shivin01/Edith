@@ -47,10 +47,6 @@ func GetCommands(base bot.BaseCommand, cfg *config.Server) bot.Commands {
 		newEmployeeInfoCommand(edithBase),
 		newMarkAttendanceCommand(edithBase),
 
-		// Client
-		newAddClientCommand(edithBase),
-		newListClientCommand(edithBase),
-
 		// announcements
 		NewCelebrationsCommand(edithBase),
 		NewNewsFeedCommand(edithBase),

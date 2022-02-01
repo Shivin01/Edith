@@ -10,7 +10,7 @@ class EmployeeRegisterSerializer(BaseSerializer, RegisterSerializer):
     password = serializers.CharField(read_only=True)
 
     def save(self, request):
-        request.data['client'] = Client.objects.get(name=request.data['client_name'])
+        request.data['client'], _ = Client.objects.get_or_create(name=request.data['client_name'])
         self.instance = request.data
         self.is_valid(raise_exception=True)
         self.validated_data.pop('password1')

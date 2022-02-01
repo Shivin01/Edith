@@ -11,7 +11,6 @@ import (
 	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 	"github.com/Shivin01/Edith/slack-bot/pkg/client/edith"
 	"github.com/Shivin01/Edith/slack-bot/pkg/db"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/pkg/errors"
 )
 
@@ -29,7 +28,7 @@ type addUserCommand struct {
 func (c *addUserCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewManagerMatcher(
 		c.SlackClient,
-		matcher.NewRegexpMatcher(`add user <@(?P<user>[\w\-_\\/]+)> (?P<designation>hr|admin|dev|manager) (?P<gender>male|female|others) (?P<client>[\w\-_\\/]+)`, c.run),
+		matcher.NewRegexpMatcher(`add user <@(?P<user>[\w\-_\\/]+)> (?P<designation>hr|admin|dev|manager) (?P<gender>male|female|others)`, c.run),
 		true,
 	)
 }
@@ -37,11 +36,9 @@ func (c *addUserCommand) GetMatcher() matcher.Matcher {
 func (c *addUserCommand) run(match matcher.Result, message msg.Message) {
 	username := match.GetString("user")
 	designation := match.GetString("designation")
-	clientName := match.GetString("client")
 	gender := match.GetString("gender")
 	user := c.SlackClient.GetUserDetails(username, message)
-
-	spew.Dump(user)
+	team := c.SlackClient.GetTeamDetails(message)
 
 	const password = "admin@123"
 	request := edith.AddUserRequest{
@@ -57,7 +54,7 @@ func (c *addUserCommand) run(match matcher.Result, message msg.Message) {
 		Email:       fmt.Sprintf("%s@gmail.com", user.Profile.DisplayName),
 		Designation: designation,
 		JoiningDate: time.Now().Format("2006-01-02"),
-		ClientName:  clientName,
+		ClientName:  team.Name,
 		Gender:      strings.ToUpper(gender),
 	}
 
@@ -78,7 +75,7 @@ func (c *addUserCommand) run(match matcher.Result, message msg.Message) {
 		AccessToken: response.Token,
 		Designation: designation,
 		ServerID:    response.User.Pk,
-		ClientName:  clientName,
+		ClientName:  team.Name,
 		Gender:      strings.ToUpper(gender),
 	}
 

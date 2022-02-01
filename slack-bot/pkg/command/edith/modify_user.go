@@ -28,7 +28,6 @@ func (c *modifyUserCommand) GetMatcher() matcher.Matcher {
 		matcher.NewGroupMatcher(
 			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> designation (?P<designation>hr|admin|dev|manager)`, c.modifyDesignation),
 			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> birthdate (?P<date>\d{4}-\d{2}-\d{2})`, c.modifyBirthDate),
-			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> client (?P<name>[\w\-_\\/]+)`, c.modifyClient),
 		),
 		true,
 	)

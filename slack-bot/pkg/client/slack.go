@@ -122,6 +122,8 @@ type SlackClient interface {
 	NewPostMessage(ref msg.Ref, channelId, text string, options ...slack.MsgOption) string
 
 	SendBlockEphemeralMessage(ref msg.Ref, blocks []slack.Block, options ...slack.MsgOption)
+
+	GetTeamDetails(ref msg.Ref) *slack.TeamInfo
 }
 
 // Slack is wrapper to the slack.Client which also holds the RTM connection OR the socketmode.Client and all needed config
@@ -140,6 +142,14 @@ func (s *Slack) GetUserDetails(userId string, ref msg.Ref) *slack.User {
 			Error(err.Error())
 	}
 	return user
+}
+
+func (s *Slack) GetTeamDetails(ref msg.Ref) *slack.TeamInfo {
+	team, err := s.Client.GetTeamInfo()
+	if err != nil {
+		log.WithField("user", ref.GetUser()).Error()
+	}
+	return team
 }
 
 // AddReaction will add a reaction from the given message

@@ -35,6 +35,7 @@ oauth_config:
       - reactions:write
       - users:read
       - files:write
+      - team:read
 settings:
   event_subscriptions:
     bot_events:
