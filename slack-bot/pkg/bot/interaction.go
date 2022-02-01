@@ -5,7 +5,6 @@ import (
 
 	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 	"github.com/Shivin01/Edith/slack-bot/pkg/db"
-	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
@@ -54,7 +53,6 @@ func (b *Bot) handleEvent(eventsAPIEvent slackevents.EventsAPIEvent) {
 
 func (b *Bot) handleInteraction(payload slack.InteractionCallback) bool {
 	user := &db.User{}
-	spew.Dump(payload.User)
 	if err := b.DB.Debug().Model(&db.User{}).Where("id = ?", payload.User.ID).First(user).Error; err != nil {
 		log.Warnf("User %s tried to execute a command", payload.User.ID)
 		return false
@@ -85,6 +83,8 @@ func (b *Bot) handleInteraction(payload slack.InteractionCallback) bool {
 		User:           payload.User.ID,
 		Timestamp:      payload.Message.Timestamp,
 		UpdatedMessage: true,
+		DBUser:         user,
+		AdminMessage:   false,
 	}
 
 	// update the original slack message (with the button) and disable the button
