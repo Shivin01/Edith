@@ -54,7 +54,7 @@ func (c *command) GetHelp() []bot.Help {
 		},
 		{
 			Command:     "delete command '<alias>'",
-			Description: "define a custom alias",
+			Description: "delete a custom alias",
 			Category:    category,
 			Examples: []string{
 				"delete command 'build master'",
