@@ -6,6 +6,6 @@ __pycache__
 venv
 */**/.DS_Store
 ./jenkins-data
-slack-bot/config.yaml
 slack-bot/bot.log
 slack-bot/storage/gorm.db
+slack-bot/config.yaml
