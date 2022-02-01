@@ -24,7 +24,6 @@ func GetCommands(slackClient client.SlackClient, cfg config.Config, db *db.DB) *
 		NewSendMessageCommand(base),
 		NewHelpCommand(base, commands),
 		weather.NewWeatherCommand(base, cfg.OpenWeather),
-		cron.NewCronCommand(base, cfg.Crons),
 		custom.GetCommand(base),
 		queue.NewQueueCommand(base),
 		queue.NewListCommand(base),
