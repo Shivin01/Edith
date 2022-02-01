@@ -5,9 +5,9 @@ import (
 
 	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
 	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
 	"github.com/Shivin01/Edith/slack-bot/pkg/client"
 	"github.com/Shivin01/Edith/slack-bot/pkg/db"
-	"github.com/Shivin01/Edith/slack-botslack-bot/pkg/bot/util"
 )
 
 var lock sync.Mutex
