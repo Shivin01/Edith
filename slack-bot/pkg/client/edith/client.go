@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 	"github.com/pkg/errors"
 )
 

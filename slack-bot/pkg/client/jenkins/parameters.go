@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 )
 
 // Parameters is a simple string map of all build parameters

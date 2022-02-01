@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/config"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
@@ -204,7 +204,7 @@ func (b *Bot) ProcessMessage(message msg.Message, fromUserContext bool) {
 		defer lock.Unlock()
 	}
 
-	var stat = db.Stat{}
+	stat := db.Stat{}
 	if err := b.DB.Debug().Model(&db.Stat{}).Where("ID = ?", 1).First(&stat).Error; err != nil {
 		// handle error
 	}
@@ -227,7 +227,7 @@ func (b *Bot) ProcessMessage(message msg.Message, fromUserContext bool) {
 	}
 
 	// check if user is allowed to interact with the edith
-	//existing := b.allowedUsers.Contains(message.User)
+	// existing := b.allowedUsers.Contains(message.User)
 	if !isAuthenticated && fromUserContext && !b.config.Slack.IsFakeServer() {
 		logger.Errorf("user %s is not allowed to execute message (missing in 'allowed_users' section): %s", message.User, message.Text)
 		b.slackClient.SendMessage(message, fmt.Sprintf(

@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 )
 
 // GetCommands will return a list of available admin commands

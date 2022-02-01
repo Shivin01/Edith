@@ -3,8 +3,8 @@ package matcher
 import (
 	"regexp"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
 )
 
 // NewRegexpMatcher matches a command based on a given regexp. 2 additional rules:

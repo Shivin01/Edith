@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 // NewSendMessageCommand is able to send a message to any user/channel

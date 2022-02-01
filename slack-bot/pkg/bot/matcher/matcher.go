@@ -1,7 +1,7 @@
 package matcher
 
 import (
-	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 // Runner contains the actual logic of the executed command. gets the actual slack MessageEvent and the matched parameters of the message

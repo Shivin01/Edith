@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"text/template"
 
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 )
 
 // TemplateFunctionProvider can be provided by Commands to register template functions to the internal parser.

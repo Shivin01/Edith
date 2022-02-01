@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 	"github.com/bndr/gojenkins"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/config"
 )
 
 // Client is an interface representing used jenkins functions of gojenkins.

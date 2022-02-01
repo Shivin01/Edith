@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 	"github.com/pkg/errors"
 	"github.com/slack-go/slack"
 )
@@ -32,7 +32,6 @@ func (c *celebrationsCommand) GetMatcher() matcher.Matcher {
 }
 
 func (c *celebrationsCommand) run(match matcher.Result, message msg.Message) {
-
 	if message.DBUser == nil {
 		user := &db.User{}
 		if err := c.DB.Debug().Model(&db.User{}).First(&user).Error; err != nil {

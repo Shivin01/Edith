@@ -5,12 +5,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/client/jenkins"
-	"github.com/immanoj16/edith/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client/jenkins"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 )
 
 // command to trigger/start jenkins jobs

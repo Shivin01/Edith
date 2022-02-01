@@ -3,7 +3,7 @@ package matcher
 import (
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 // NewTextMatcher match messages by full text (case insensitive)

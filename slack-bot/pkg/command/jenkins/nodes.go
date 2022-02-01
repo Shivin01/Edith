@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 	"github.com/bndr/gojenkins"
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/config"
 )
 
 const (

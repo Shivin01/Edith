@@ -1,9 +1,10 @@
 package matcher
 
 import (
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
 	"strings"
+
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
 )
 
 // NewPrefixMatcher accepts command which starts with the given prefix

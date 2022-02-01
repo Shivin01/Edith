@@ -4,9 +4,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 	"github.com/rifflock/lfshook"
 	log "github.com/sirupsen/logrus"
 )

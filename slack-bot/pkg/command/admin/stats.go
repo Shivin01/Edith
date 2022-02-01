@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/config"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 )
 
 // bots uptime
@@ -60,7 +60,7 @@ func (c *statsCommand) collectStats(result *statsResult) {
 
 	result.addNewSection("Server runtime")
 	result.addValue("Registered crons", util.FormatInt(len(c.cfg.Crons)))
-	//result.addValue("Queued commands", util.FormatInt(queue.CountCurrentJobs()))
+	// result.addValue("Queued commands", util.FormatInt(queue.CountCurrentJobs()))
 	result.addValue("Goroutines", util.FormatInt(runtime.NumGoroutine()))
 	result.addValue("Mem Alloc", util.FormatBytes(m.Alloc))
 	result.addValue("Mem Sys", util.FormatBytes(m.Sys))

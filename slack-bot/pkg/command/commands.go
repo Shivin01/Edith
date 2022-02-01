@@ -1,17 +1,17 @@
 package command
 
 import (
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/command/admin"
-	"github.com/immanoj16/edith/pkg/command/cron"
-	"github.com/immanoj16/edith/pkg/command/custom"
-	"github.com/immanoj16/edith/pkg/command/edith"
-	"github.com/immanoj16/edith/pkg/command/jenkins"
-	"github.com/immanoj16/edith/pkg/command/queue"
-	"github.com/immanoj16/edith/pkg/command/weather"
-	"github.com/immanoj16/edith/pkg/config"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/admin"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/cron"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/custom"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/edith"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/jenkins"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/queue"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command/weather"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 )
 
 // GetCommands returns the list of default command which are available

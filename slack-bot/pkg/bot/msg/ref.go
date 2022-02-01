@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 )
 
 // Ref is the context of a message: the author, channel, timestamp etc

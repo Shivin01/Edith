@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
 	"github.com/bndr/gojenkins"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/client"
 	log "github.com/sirupsen/logrus"
 )
 

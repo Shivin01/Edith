@@ -4,9 +4,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )

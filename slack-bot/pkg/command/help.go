@@ -6,9 +6,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 type helpCommand struct {
@@ -48,7 +48,7 @@ func (t *helpCommand) GetHelp() []bot.Help {
 
 // ShowAll command entries and group them by "category"
 func (t *helpCommand) showAll(match matcher.Result, message msg.Message) {
-	//t.once.Do(t.prebuildHelp)
+	// t.once.Do(t.prebuildHelp)
 	t.prebuildHelp()
 
 	t.AddReaction("💡", message)

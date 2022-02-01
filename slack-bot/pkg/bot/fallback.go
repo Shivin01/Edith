@@ -5,8 +5,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
 	"github.com/slack-go/slack"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )

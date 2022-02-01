@@ -3,9 +3,9 @@ package bot
 import (
 	"sync"
 
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/db"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
@@ -103,7 +103,7 @@ func (b *Bot) handleInteraction(payload slack.InteractionCallback) bool {
 	// execute the command which is stored for this interaction
 	go b.ProcessMessage(ref.WithText(command), true)
 
-	var stat = db.Stat{}
+	stat := db.Stat{}
 	if err := b.DB.Debug().Model(&db.Stat{}).Where("ID = ?", 1).First(&stat).Error; err != nil {
 		// handle error
 	}

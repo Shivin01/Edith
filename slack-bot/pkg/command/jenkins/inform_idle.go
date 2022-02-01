@@ -2,10 +2,11 @@ package jenkins
 
 import (
 	"context"
-	"github.com/immanoj16/edith/pkg/bot"
-	matcher2 "github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
 	"time"
+
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	matcher2 "github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 type idleWatcherCommand struct {

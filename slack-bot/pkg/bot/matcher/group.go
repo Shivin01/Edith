@@ -1,6 +1,6 @@
 package matcher
 
-import "github.com/immanoj16/edith/pkg/bot/msg"
+import "github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 
 // NewGroupMatcher is a matcher that iterates through the list of specified sub-matchers ...just define multiple matcher in a chain/group
 func NewGroupMatcher(matcher ...Matcher) Matcher {

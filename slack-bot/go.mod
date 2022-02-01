@@ -1,4 +1,4 @@
-module github.com/immanoj16/edith
+module github.com/Shivin01/Edith/slack-bot
 
 go 1.17
 

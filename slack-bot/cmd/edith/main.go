@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/immanoj16/edith/pkg/bot"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/client"
-	"github.com/immanoj16/edith/pkg/command"
-	"github.com/immanoj16/edith/pkg/config"
-	"github.com/immanoj16/edith/pkg/db"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/util"
+	"github.com/Shivin01/Edith/slack-bot/pkg/client"
+	"github.com/Shivin01/Edith/slack-bot/pkg/command"
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
+	"github.com/Shivin01/Edith/slack-bot/pkg/db"
 	log "github.com/sirupsen/logrus"
 )
 

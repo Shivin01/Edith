@@ -3,8 +3,8 @@ package custom
 import (
 	"fmt"
 
-	"github.com/immanoj16/edith/pkg/bot/matcher"
-	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/matcher"
+	"github.com/Shivin01/Edith/slack-bot/pkg/bot/msg"
 )
 
 func (c command) list(match matcher.Result, message msg.Message) {

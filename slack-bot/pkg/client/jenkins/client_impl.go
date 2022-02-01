@@ -2,9 +2,10 @@ package jenkins
 
 import (
 	"context"
-	"github.com/immanoj16/edith/pkg/config"
 	"net/http"
 	"strings"
+
+	"github.com/Shivin01/Edith/slack-bot/pkg/config"
 
 	"github.com/bndr/gojenkins"
 )
