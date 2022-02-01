@@ -58,10 +58,10 @@ func (c *makeAnnouncementCommand) run(match matcher.Result, message msg.Message)
 func (c *makeAnnouncementCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "make announcement <type_in_string> <details_in_string>",
+			Command:     "make announcement '<type_in_string>' '<details_in_string>'",
 			Description: "make announcement in company wide",
 			Examples: []string{
-				"make announcement abc def",
+				"make announcement 'abc' 'def'",
 			},
 			Category: category,
 		},
