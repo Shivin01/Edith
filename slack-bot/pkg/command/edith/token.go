@@ -44,16 +44,3 @@ func (c *tokenCommand) run(match matcher.Result, message msg.Message) {
 		// handle error
 	}
 }
-
-func (c *tokenCommand) GetHelp() []bot.Help {
-	return []bot.Help{
-		{
-			Command:     "token <username> <password>",
-			Description: "Save token in the database to use in the future until expire",
-			Examples: []string{
-				"token manojm manojm",
-			},
-			Category: category,
-		},
-	}
-}

@@ -41,16 +41,3 @@ func (c *sendMessageCommand) sendMessage(match matcher.Result, message msg.Messa
 		fmt.Sprintf("I'll send `%s` to %s", match.GetString("text"), match.GetString("fullChannel")),
 	)
 }
-
-func (c *sendMessageCommand) GetHelp() []bot.Help {
-	return []bot.Help{
-		{
-			Command:     "send message <message> to <who>",
-			Description: "sends a message to given user/channel",
-			Examples: []string{
-				"send message #dev-backend PANIC MODE!!!",
-				"send message to @username please take a look in #general",
-			},
-		},
-	}
-}

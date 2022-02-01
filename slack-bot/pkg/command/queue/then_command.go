@@ -52,17 +52,3 @@ func (c *thenCommand) run(match matcher.Result, message msg.Message) {
 		log.Infof("[Queue] Blocking command is over, eval message: %s", command)
 	}()
 }
-
-func (c *thenCommand) GetHelp() []bot.Help {
-	return []bot.Help{
-		{
-			Command:     "then (or queue)",
-			Description: "queue a command which is executed when the current task is done",
-			Examples: []string{
-				"queue reply My job is ready",
-				"queue trigger job Deploy master",
-				"then trigger job IntegrationTest",
-			},
-		},
-	}
-}

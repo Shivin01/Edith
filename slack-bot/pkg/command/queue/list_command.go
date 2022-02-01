@@ -173,22 +173,3 @@ func (c *listCommand) GetTemplateFunction(database *db.DB) template.FuncMap {
 		},
 	}
 }
-
-func (c *listCommand) GetHelp() []bot.Help {
-	return []bot.Help{
-		{
-			Command:     "list queue",
-			Description: "list all queued commands",
-			Examples: []string{
-				"list queue",
-			},
-		},
-		{
-			Command:     "list queue in channel",
-			Description: "list queued commands in current channel",
-			Examples: []string{
-				"list queue in channel",
-			},
-		},
-	}
-}
