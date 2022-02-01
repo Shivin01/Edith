@@ -33,39 +33,6 @@ func (c *modifyUserCommand) GetMatcher() matcher.Matcher {
 	)
 }
 
-func (c *modifyUserCommand) modifyClient(match matcher.Result, message msg.Message) {
-	user := match.GetString("user")
-	clientName := match.GetString("name")
-
-	u := &db.User{}
-	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).First(u).Error; err != nil {
-		message.DBUser = nil
-	}
-
-	err := c.client.ModifyUser(context.TODO(), u.ServerID, map[string]interface{}{
-		"client_name": clientName,
-	}, message.DBUser.AccessToken)
-	if err != nil {
-		c.SlackClient.AddReaction("❌", message)
-		c.SlackClient.ReplyError(
-			message,
-			errors.New("sorry, error while creating user"),
-		)
-		return
-	}
-
-	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).Update("client_name", clientName).Error; err != nil {
-		c.SlackClient.AddReaction("❌", message)
-		c.SlackClient.ReplyError(
-			message,
-			errors.New("sorry, error while updating user to database."),
-		)
-		return
-	}
-	c.SlackClient.AddReaction("✅", message)
-	c.SlackClient.SendMessage(message, fmt.Sprintf("updated user %s", user))
-}
-
 func (c *modifyUserCommand) modifyBirthDate(match matcher.Result, message msg.Message) {
 	user := match.GetString("user")
 	date := match.GetString("date")
