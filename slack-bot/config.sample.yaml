@@ -1,6 +1,6 @@
 slack:
-  token: # add token
-  socket_token: # add socket token
+  token: xoxb-  # add token
+  socket_token: xapp-1- # add socket token
   debug: true
 
 jenkins:

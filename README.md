@@ -7,9 +7,8 @@ Start the Backend
 1. `python3.9 -m venv venv`
 2. `source venv/bin/activate`
 3. `pip install -r requirements.txt`
-4. Run `docker-compose up -d`, it will start postgres and jenkins container to test the bot.
-5. `python manage.py migrate`
-6. `python manage.py runserver`
+4. Open a terminal and run `bash ./scripts/slack-bot.sh` (prerequisite - docker and docker-compose is required to run postgres)
+
 
 ## SlackBot
 
@@ -74,9 +73,10 @@ settings:
 
 ### Option 1: run via go
 1. install go
-2. create a config.yaml (at least a slack token is required) or take a look in config-example.yaml
+2. create a config.yaml (at least a slack token is required) or take a look in config.sample.yaml
 3. go inside slack bot folder `cd slack-bot`
-4. run `go run cmd/edith/main.go`
+4. Edit slack token and slack auth token in config.yaml file
+5. Run the bot server by `bash ./scripts/slack-bot.sh`
 
 
 # Usage
