@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/bndr/gojenkins v1.1.0
 	github.com/brainexe/viper v1.8.2
-	github.com/davecgh/go-spew v1.1.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/hackebrot/turtle v0.2.0
 	github.com/pkg/errors v0.9.1
@@ -21,18 +20,9 @@ require (
 )
 
 require (
-	github.com/fsnotify/fsnotify v1.5.1 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
-	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.4 // indirect
-	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.11 // indirect
-	github.com/mitchellh/mapstructure v1.4.3 // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/spf13/afero v1.8.0 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
-	github.com/subosito/gotenv v1.2.0 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
 	gopkg.in/ini.v1 v1.66.3 // indirect
