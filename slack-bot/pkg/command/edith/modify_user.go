@@ -127,18 +127,10 @@ func (c *modifyUserCommand) modifyDesignation(match matcher.Result, message msg.
 func (c *modifyUserCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "modify user @username designation @username hr|sales|dev|admin",
+			Command:     "modify user @username designation <hr|sales|dev|admin|manager>",
 			Description: "modify existing user",
 			Examples: []string{
 				"modify user @jarvis designation sales",
-			},
-			Category: category,
-		},
-		{
-			Command:     "modify user @username client <client_name>",
-			Description: "modify existing user",
-			Examples: []string{
-				"modify user @jarvis client newclient",
 			},
 			Category: category,
 		},

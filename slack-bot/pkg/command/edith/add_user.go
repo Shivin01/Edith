@@ -28,7 +28,7 @@ type addUserCommand struct {
 func (c *addUserCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewManagerMatcher(
 		c.SlackClient,
-		matcher.NewRegexpMatcher(`add user <@(?P<user>[\w\-_\\/]+)> (?P<designation>hr|admin|dev|manager) (?P<gender>male|female|others)`, c.run),
+		matcher.NewRegexpMatcher(`add user <@(?P<user>[\w\-_\\/]+)> (?P<designation>hr|sales|dev|admin|manager) (?P<gender>male|female|others)`, c.run),
 		true,
 	)
 }

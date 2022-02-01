@@ -26,7 +26,7 @@ type makeAnnouncementCommand struct {
 func (c *makeAnnouncementCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewRegexpMatcher(`make announcement (?P<type>[\w\-_\\/]+) (?P<details>[\w\-_\\/]+)`, c.run),
+		matcher.NewRegexpMatcher(`make announcement '(?P<type>.*)' '(?P<details>.*)'`, c.run),
 		true,
 	)
 }
