@@ -147,7 +147,9 @@ func (s *Slack) GetUserDetails(userId string, ref msg.Ref) *slack.User {
 func (s *Slack) GetTeamDetails(ref msg.Ref) *slack.TeamInfo {
 	team, err := s.Client.GetTeamInfo()
 	if err != nil {
-		log.WithField("user", ref.GetUser()).Error()
+		log.
+			WithField("user", ref.GetUser()).
+			Error(err.Error())
 	}
 	return team
 }
