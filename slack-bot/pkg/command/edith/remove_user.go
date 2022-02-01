@@ -2,6 +2,8 @@ package edith
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -22,12 +24,10 @@ type removeUserCommand struct {
 }
 
 func (c *removeUserCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewManagerMatcher(
 		c.SlackClient,
-		matcher.NewManagerMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`remove user <@(?P<user>[\w\-_\\/]+)>`, c.run),
-		),
+		matcher.NewRegexpMatcher(`remove user <@(?P<user>[\w\-_\\/]+)>`, c.run),
+		true,
 	)
 }
 
@@ -64,6 +64,9 @@ func (c *removeUserCommand) run(match matcher.Result, message msg.Message) {
 		)
 		return
 	}
+
+	c.SlackClient.AddReaction("✅", message)
+	c.SlackClient.SendMessage(message, fmt.Sprintf("successfully removed user %s", user.GetRealName()))
 }
 
 func (c *removeUserCommand) GetHelp() []bot.Help {

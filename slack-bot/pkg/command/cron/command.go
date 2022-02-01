@@ -1,13 +1,13 @@
 package cron
 
 import (
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/config"
-	"strings"
-
 	cronLib "github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 )
@@ -63,6 +63,7 @@ func (c *command) getCallback(cron config.Cron) func() {
 				newMessage.User = "cron"
 				newMessage.Channel, _ = client.GetChannelIDAndName(cron.Channel)
 				newMessage.Text = line
+				newMessage.AdminMessage = cron.IsAdmin
 				client.HandleMessage(newMessage)
 			}
 		}

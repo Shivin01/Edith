@@ -16,21 +16,39 @@ class CelebrationViewSet(viewsets.ViewSet):
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (IsAuthenticated,)
 
+    def check_for_celebration(self, old_date, today):
+        if not old_date:
+            return False
+        year, month, day = str(old_date).split('-')
+        old_year, present_month, present_day = str(today).split('-')
+        return month == present_month and day == present_day and year != old_year
+
     def get(self, request, *args, **kwargs):
         """
         :return:
         """
         today = date.today()
         employees = []
-        # Employee.objects.filter(client=request.user.client)
-        for employee in Employee.objects.all():
-            if employee.birth_date == today:
+        for employee in Employee.objects.filter(client=request.user.client):
+            if self.check_for_celebration(employee.birth_date, today):
                 employees.append({
                     'image': employee.image if employee.image else '',
                     'first_name': employee.first_name,
                     'middle_name': employee.middle_name,
                     'last_name': employee.last_name,
                     'id': employee.id,
+                    'gender': employee.gender,
+                    'type': 'birthday'
+                })
+            elif self.check_for_celebration(employee.joining_date, today):
+                employees.append({
+                    'image': employee.image if employee.image else '',
+                    'first_name': employee.first_name,
+                    'middle_name': employee.middle_name,
+                    'last_name': employee.last_name,
+                    'id': employee.id,
+                    'gender': employee.gender,
+                    'type': 'anniversary'
                 })
 
         return Response(employees)
@@ -51,8 +69,7 @@ class NewsFeedViewSet(viewsets.ViewSet):
         """
         today = date.today()
         employees = []
-        # Employee.objects.filter(client=request.user.client)
-        for employee in Employee.objects.all():
+        for employee in Employee.objects.filter(client=request.user.client):
             new_date = employee.joining_date + timedelta(days=self.DAYS_DELTA)
             if new_date > today:
                 employees.append({

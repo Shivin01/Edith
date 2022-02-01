@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
@@ -10,7 +12,6 @@ import (
 	"github.com/immanoj16/edith/pkg/config"
 	"github.com/immanoj16/edith/pkg/db"
 	log "github.com/sirupsen/logrus"
-	"os"
 )
 
 // main entry point for the edith application. Listens on incoming slack messages and handles them

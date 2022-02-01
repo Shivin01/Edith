@@ -2,19 +2,20 @@ package bot
 
 import (
 	"fmt"
+	"math"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/slack-go/slack"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
-	"math"
-	"strings"
 )
 
 const minDistance = 4
 
 // try to find the best matching commands based on command name and examples
 func (b *Bot) sendFallbackMessage(message msg.Message) {
-	bestMatching := getBestMatchingHelp(b, message.Text)
+	bestMatching := b.getBestMatchingHelp(message.Text)
 
 	if bestMatching.Command == "" {
 		b.slackClient.AddReaction("❓", message)
@@ -41,7 +42,7 @@ func (b *Bot) sendFallbackMessage(message msg.Message) {
 }
 
 // find the best matching command bases on the given strings...using levenstein to fetch the best one
-func getBestMatchingHelp(b *Bot, eventText string) Help {
+func (b *Bot) getBestMatchingHelp(eventText string) Help {
 	distance := math.MaxInt32
 	var bestMatching Help
 

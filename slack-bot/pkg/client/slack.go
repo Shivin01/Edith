@@ -2,12 +2,12 @@ package client
 
 import (
 	"fmt"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/config"
 	"strings"
 	"sync"
 
+	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/immanoj16/edith/pkg/bot/util"
+	"github.com/immanoj16/edith/pkg/config"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
@@ -120,6 +120,8 @@ type SlackClient interface {
 	GetUserDetails(userId string, ref msg.Ref) *slack.User
 
 	NewPostMessage(ref msg.Ref, channelId, text string, options ...slack.MsgOption) string
+
+	SendBlockEphemeralMessage(ref msg.Ref, blocks []slack.Block, options ...slack.MsgOption)
 }
 
 // Slack is wrapper to the slack.Client which also holds the RTM connection OR the socketmode.Client and all needed config
@@ -279,6 +281,13 @@ func (s *Slack) SendBlockMessage(ref msg.Ref, blocks []slack.Block, options ...s
 	}
 
 	return s.SendMessage(ref, "", append(allOptions, options...)...)
+}
+
+func (s *Slack) SendBlockEphemeralMessage(ref msg.Ref, blocks []slack.Block, options ...slack.MsgOption) {
+	allOptions := []slack.MsgOption{
+		slack.MsgOptionBlocks(blocks...),
+	}
+	s.SendEphemeralMessage(ref, "", append(allOptions, options...)...)
 }
 
 // GetUserIDAndName returns the user-id and user-name based on a identifier. If can get a user-id or name

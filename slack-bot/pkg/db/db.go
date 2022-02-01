@@ -10,8 +10,8 @@ type DB struct {
 	*gorm.DB
 }
 
+// NewDB returns a new gorm instance
 func NewDB(path string) (*DB, error) {
-	// github.com/mattn/go-sqlite3
 	db, err := gorm.Open(sqlite.Open(filepath.Join(path, "gorm.db")), &gorm.Config{})
 	if err != nil {
 		return nil, err
@@ -22,6 +22,7 @@ func NewDB(path string) (*DB, error) {
 		&Stat{},
 		&FallbackQueue{},
 		&CustomCommand{},
+		&Client{},
 	)
 	if err != nil {
 		return nil, err

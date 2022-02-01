@@ -3,11 +3,12 @@ package edith
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/config"
 	"github.com/pkg/errors"
-	"net/http"
-	"time"
 )
 
 // Client is an interface representing used jenkins functions of gojenkins.
@@ -15,7 +16,8 @@ type Client interface {
 	GetToken(ctx context.Context, username, password string) (*tokenResponse, error)
 	RefreshToken(ctx context.Context, refresh string) (string, error)
 	GetUsers(ctx context.Context, token string) ([]UserResponse, error)
-	AddUser(ctx context.Context, requestData *AddUserRequest) (*AddUserResponse, error)
+	AddUser(ctx context.Context, requestData AddUserRequest) (*AddUserResponse, error)
+	ModifyUser(ctx context.Context, userId int, requestData map[string]interface{}, token string) error
 	GetUser(ctx context.Context, slackID, token string) ([]*UserResponse, error)
 	GetMinimalUser(ctx context.Context, slackID, token string) ([]*UserResponse, error)
 	MarkAttendance(ctx context.Context, token string) error
@@ -28,6 +30,8 @@ type Client interface {
 	DeleteUser(ctx context.Context, userId int, token string) error
 	ListLeavesForApproval(ctx context.Context, token string) ([]*LeaveResponse, error)
 	ApproveLeave(ctx context.Context, leaveId int, token string) error
+	AddClient(ctx context.Context, requestData AddClientRequest) (*AddClientResponse, error)
+	GetClients(ctx context.Context) ([]AddClientResponse, error)
 }
 
 // GetClient created Jenkins client with given options/credentials
@@ -81,22 +85,9 @@ func (e *edithClientImpl) GetUsers(ctx context.Context, token string) ([]UserRes
 	return res, nil
 }
 
-func (e *edithClientImpl) AddUser(ctx context.Context, requestData *AddUserRequest) (*AddUserResponse, error) {
-	body := map[string]interface{}{
-		"username":     requestData.Username,
-		"password":     requestData.Password,
-		"password1":    requestData.Password,
-		"password2":    requestData.Password,
-		"first_name":   requestData.FirstName,
-		"middle_name":  requestData.MiddleName,
-		"last_name":    requestData.LastName,
-		"phone_number": requestData.PhoneNumber,
-		"email":        requestData.Email,
-		"skills":       requestData.Skills,
-	}
-
+func (e *edithClientImpl) AddUser(ctx context.Context, requestData AddUserRequest) (*AddUserResponse, error) {
 	res := &AddUserResponse{}
-	restyRes, err := e.client.Post(ctx, addUser, body, res, nil)
+	restyRes, err := e.client.Post(ctx, addUser, requestData, res, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -216,6 +207,32 @@ func (e *edithClientImpl) ListLeavesForApproval(ctx context.Context, token strin
 
 func (e *edithClientImpl) ApproveLeave(ctx context.Context, leaveId int, token string) error {
 	_, err := e.client.Patch(ctx, fmt.Sprintf("%s%d/", adminLeave, leaveId), token, nil, nil, nil)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (e *edithClientImpl) AddClient(ctx context.Context, requestData AddClientRequest) (*AddClientResponse, error) {
+	res := &AddClientResponse{}
+	_, err := e.client.PostWithToken(ctx, clientList, requestData, res, "", nil)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (e *edithClientImpl) GetClients(ctx context.Context) ([]AddClientResponse, error) {
+	var res []AddClientResponse
+	_, err := e.client.GetWithToken(ctx, clientList, "", &res, nil)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (e *edithClientImpl) ModifyUser(ctx context.Context, userId int, requestData map[string]interface{}, token string) error {
+	_, err := e.client.Patch(ctx, fmt.Sprintf("%s%d/", modifyEmployee, userId), token, requestData, nil, nil)
 	if err != nil {
 		return err
 	}

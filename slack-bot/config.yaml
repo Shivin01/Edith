@@ -1,6 +1,6 @@
 slack:
-  token: xoxb-2928575696436-2982197883351-h6aXe1ibmRyzrDwFx00h82f7
-  socket_token: xapp-1-A030LFTMK0Q-2996842725363-04c700e8dd3d7441cfc7c0f61c59919682e832bcf9eed63dbc2ea2a3e565cdbc
+  token: xoxb-2928575696436-2982197883351-bIIeeccA64DK4oGXVErxqdcZ
+  socket_token: xapp-1-A030LFTMK0Q-3040480516945-51af40a4b554fb3fad51f192e14a4a3820cc135e60055731b78e031c96222494
   debug: true
 
 jenkins:
@@ -15,15 +15,12 @@ jenkins:
           type: string
 
 crons:
-#  - schedule: "* * * * *"
-#    channel: "#devops"
-#    commands:
-#      - trigger job test
-#      - ping
-#  - schedule: "0 10 * * *"
-#    channel: "#devops"
-#    commands:
-#      - weather
+  - schedule: "* 10 * * *"
+    channel: "#general"
+    commands:
+      - weather
+      - newsfeed
+      - celebrations
 
 open_weather:
   api_key: a8c44e038e53815ee892e48dcdca2c3e

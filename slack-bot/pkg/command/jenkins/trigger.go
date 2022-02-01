@@ -2,14 +2,15 @@ package jenkins
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client/jenkins"
 	"github.com/immanoj16/edith/pkg/config"
-	"regexp"
-	"strings"
 )
 
 // command to trigger/start jenkins jobs

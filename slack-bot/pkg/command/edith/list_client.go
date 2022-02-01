@@ -3,7 +3,6 @@ package edith
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
@@ -15,42 +14,40 @@ import (
 )
 
 // newPingCommand just prints a PING with the needed time from client->slack->edith server
-func newListUserCommand(command edithCommand) bot.Command {
-	return &listUserCommand{
+func newListClientCommand(command edithCommand) bot.Command {
+	return &listClientCommand{
 		command,
 	}
 }
 
-type listUserCommand struct {
+type listClientCommand struct {
 	edithCommand
 }
 
-func (c *listUserCommand) GetMatcher() matcher.Matcher {
+func (c *listClientCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewManagerMatcher(
 		c.SlackClient,
 		matcher.NewGroupMatcher(
-			matcher.NewTextMatcher("list users local", c.getLocalUsers),
-			matcher.NewTextMatcher("list users server", c.getServerUsers),
+			matcher.NewTextMatcher("list clients local", c.getLocalClients),
+			matcher.NewTextMatcher("list clients server", c.getServerClients),
 		),
 		true,
 	)
 }
 
-func (c listUserCommand) formatUsers(users []db.User) []slack.Block {
+func (c listClientCommand) format(clients []db.Client) []slack.Block {
 	var fields [][]string
-	for _, user := range users {
+	for _, c := range clients {
 		fields = append(fields, []string{
-			fmt.Sprintf("*ID:*\t%s", user.ID),
+			fmt.Sprintf("*ID:*\t%d", c.ID),
 			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Username:*\t%s", user.Username),
+			fmt.Sprintf("*Name:*\t%s", c.Name),
 			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Full Name:*\t%s", user.FullName),
-			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Designation:*\t%s", user.Designation),
+			fmt.Sprintf("*Registered Name:*\t%s", c.RegisteredName),
 		})
 	}
 
-	headerSection := client.GetTextBlock("*Users*")
+	headerSection := client.GetTextBlock("*Clients*")
 	blocks := make([]slack.Block, 0, len(fields)+1)
 	blocks = append(blocks, headerSection)
 	for _, elements := range fields {
@@ -60,12 +57,13 @@ func (c listUserCommand) formatUsers(users []db.User) []slack.Block {
 		}
 		blocks = append(blocks, slack.NewSectionBlock(nil, textBlocks, nil))
 	}
+
 	return blocks
 }
 
-func (c *listUserCommand) getLocalUsers(match matcher.Result, message msg.Message) {
-	var users []db.User
-	if err := c.DB.Debug().Model(&db.User{}).Find(&users).Error; err != nil {
+func (c *listClientCommand) getLocalClients(match matcher.Result, message msg.Message) {
+	var clients []db.Client
+	if err := c.DB.Debug().Model(&db.Client{}).Find(&clients).Error; err != nil {
 		c.SlackClient.AddReaction("❌", message)
 		c.SlackClient.ReplyError(
 			message,
@@ -75,11 +73,11 @@ func (c *listUserCommand) getLocalUsers(match matcher.Result, message msg.Messag
 	}
 
 	c.SlackClient.AddReaction("✅", message)
-	c.SlackClient.SendBlockMessage(message, c.formatUsers(users))
+	c.SendBlockMessage(message, c.format(clients))
 }
 
-func (c *listUserCommand) getServerUsers(match matcher.Result, message msg.Message) {
-	res, err := c.client.GetUsers(context.TODO(), message.DBUser.AccessToken)
+func (c *listClientCommand) getServerClients(match matcher.Result, message msg.Message) {
+	res, err := c.client.GetClients(context.TODO())
 	if err != nil {
 		c.SlackClient.AddReaction("❌", message)
 		c.SlackClient.ReplyError(
@@ -91,26 +89,17 @@ func (c *listUserCommand) getServerUsers(match matcher.Result, message msg.Messa
 	c.SlackClient.AddReaction("✅", message)
 
 	var fields [][]string
-	for _, user := range res {
-		name := strings.Trim(user.FirstName, " ")
-		if user.MiddleName != "" {
-			name += fmt.Sprintf(" %s", user.MiddleName)
-		}
-		if user.LastName != "" {
-			name += fmt.Sprintf(" %s", user.LastName)
-		}
+	for _, c := range res {
 		fields = append(fields, []string{
-			fmt.Sprintf("*ID:*\t%s", user.SlackID),
+			fmt.Sprintf("*ID:*\t%d", c.ID),
 			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Username:*\t%s", user.Username),
+			fmt.Sprintf("*Name:*\t%s", c.Name),
 			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Full Name:*\t%s", name),
-			fmt.Sprintf("\t"),
-			fmt.Sprintf("*Designation:*\t%s", user.Designation),
+			fmt.Sprintf("*Registered Name:*\t%s", c.RegisteredName),
 		})
 	}
 
-	headerSection := client.GetTextBlock("*Users*")
+	headerSection := client.GetTextBlock("*Clients*")
 	blocks := make([]slack.Block, 0, len(fields)+1)
 	blocks = append(blocks, headerSection)
 	for _, elements := range fields {
@@ -124,14 +113,14 @@ func (c *listUserCommand) getServerUsers(match matcher.Result, message msg.Messa
 	c.SendBlockMessage(message, blocks)
 }
 
-func (c *listUserCommand) GetHelp() []bot.Help {
+func (c *listClientCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "list users <local|server>",
-			Description: "list users",
+			Command:     "list clients <local|server>",
+			Description: "list clients",
 			Examples: []string{
-				"list users local",
-				"list users server",
+				"list clients local",
+				"list clients server",
 			},
 			Category: category,
 		},

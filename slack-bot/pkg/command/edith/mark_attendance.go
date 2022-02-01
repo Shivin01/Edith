@@ -2,6 +2,7 @@ package edith
 
 import (
 	"context"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -21,12 +22,10 @@ type markAttendanceCommand struct {
 }
 
 func (c *markAttendanceCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewTextMatcher("mark attendance", c.run),
-		),
+		matcher.NewTextMatcher("mark attendance", c.run),
+		true,
 	)
 }
 

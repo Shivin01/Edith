@@ -1,9 +1,10 @@
 package matcher
 
 import (
+	"regexp"
+
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
-	"regexp"
 )
 
 // NewRegexpMatcher matches a command based on a given regexp. 2 additional rules:

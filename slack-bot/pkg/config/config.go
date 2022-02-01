@@ -91,6 +91,7 @@ type Cron struct {
 	Channel  string   `mapstructure:"channel"`
 	Schedule string   `mapstructure:"schedule"`
 	Commands []string `mapstructure:"commands"`
+	IsAdmin  bool     `mapstructure:"is_admin"`
 }
 
 type Server struct {

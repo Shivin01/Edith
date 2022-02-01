@@ -3,6 +3,7 @@ package edith
 import (
 	"context"
 	"fmt"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -23,6 +24,7 @@ func (c *holidayCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("list holiday", c.run),
+		false,
 	)
 }
 

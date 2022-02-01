@@ -3,6 +3,8 @@ package jenkins
 import (
 	"context"
 	"fmt"
+
+	"github.com/bndr/gojenkins"
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -61,6 +63,18 @@ func (c *retryCommand) run(match matcher.Result, message msg.Message) {
 	if err != nil {
 		c.ReplyError(message, err)
 	}
+}
+
+func getBuild(ctx context.Context, job jenkins.Job, buildNumber int) (*gojenkins.Build, error) {
+	if buildNumber == 0 {
+		_, err := job.Poll(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		return job.GetLastBuild(ctx)
+	}
+	return job.GetBuild(ctx, int64(buildNumber))
 }
 
 func (c *retryCommand) GetHelp() []bot.Help {

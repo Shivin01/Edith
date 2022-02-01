@@ -3,12 +3,13 @@ package jenkins
 import (
 	"context"
 	"fmt"
+	"text/template"
+
 	"github.com/bndr/gojenkins"
 	"github.com/immanoj16/edith/pkg/bot"
-	matcher2 "github.com/immanoj16/edith/pkg/bot/matcher"
+	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/config"
-	"text/template"
 )
 
 const (
@@ -25,15 +26,15 @@ func newStatusCommand(base jenkinsCommand, jobs config.JenkinsJobs) bot.Command 
 	return &statusCommand{base, jobs}
 }
 
-func (c *statusCommand) GetMatcher() matcher2.Matcher {
-	return matcher2.NewRegexpMatcher(`(?P<action>enable|disable) job (?P<job>[\w\-_\\/]+)`, c.run)
+func (c *statusCommand) GetMatcher() matcher.Matcher {
+	return matcher.NewRegexpMatcher(`(?P<action>enable|disable) job (?P<job>[\w\-_\\/]+)`, c.run)
 }
 
 func (c *statusCommand) IsEnabled() bool {
 	return c.jenkins != nil
 }
 
-func (c *statusCommand) run(match matcher2.Result, message msg.Message) {
+func (c *statusCommand) run(match matcher.Result, message msg.Message) {
 	action := match.GetString("action")
 	jobName := match.GetString("job")
 

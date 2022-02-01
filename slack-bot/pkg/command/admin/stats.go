@@ -2,15 +2,16 @@ package admin
 
 import (
 	"fmt"
+	"runtime"
+	"strings"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/config"
 	"github.com/immanoj16/edith/pkg/db"
-	"runtime"
-	"strings"
-	"time"
 )
 
 // bots uptime
@@ -30,6 +31,7 @@ func (c *statsCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAdminMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("edith stats", c.stats),
+		false,
 	)
 }
 

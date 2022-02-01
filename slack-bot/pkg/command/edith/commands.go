@@ -37,21 +37,32 @@ func GetCommands(base bot.BaseCommand, cfg *config.Server) bot.Commands {
 	}
 
 	commands.AddCommand(
+		// Users command
 		newTokenCommand(edithBase),
 		newListUserCommand(edithBase),
 		newAddUserCommand(edithBase),
-		newEmployeeInfoCommand(edithBase),
-		NewCelebrationsCommand(edithBase),
-		NewHolidayCommand(edithBase),
-		newMarkAttendanceCommand(edithBase),
-		NewNewsFeedCommand(edithBase),
-		newModifyUserCommand(edithBase),
-		newLeaveRequestCommand(edithBase),
 		newGetTokenCommand(edithBase),
-		newLeaveListCommand(edithBase),
-		newMakeAnnouncementCommand(edithBase),
 		newRemoveUserCommand(edithBase),
+		newModifyUserCommand(edithBase),
+		newEmployeeInfoCommand(edithBase),
+		newMarkAttendanceCommand(edithBase),
+
+		// Client
+		newAddClientCommand(edithBase),
+		newListClientCommand(edithBase),
+
+		// announcements
+		NewCelebrationsCommand(edithBase),
+		NewNewsFeedCommand(edithBase),
+		newMakeAnnouncementCommand(edithBase),
+
+		// Leave commands
+		newLeaveRequestCommand(edithBase),
+		newLeaveListCommand(edithBase),
 		newLeaveApproveCommand(edithBase),
+
+		// Extra commands
+		NewHolidayCommand(edithBase),
 	)
 
 	return commands

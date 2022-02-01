@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from typing import List
 
-from edith_models.models import Employee
+from edith_models.models import Employee, Client
 from .base import BaseSerializer
 
 
@@ -10,6 +10,7 @@ class EmployeeRegisterSerializer(BaseSerializer, RegisterSerializer):
     password = serializers.CharField(read_only=True)
 
     def save(self, request):
+        request.data['client'] = Client.objects.get(name=request.data['client_name'])
         self.instance = request.data
         self.is_valid(raise_exception=True)
         self.validated_data.pop('password1')

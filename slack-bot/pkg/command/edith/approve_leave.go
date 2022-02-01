@@ -2,6 +2,7 @@ package edith
 
 import (
 	"context"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -20,12 +21,10 @@ type leaveApproveCommand struct {
 }
 
 func (c *leaveApproveCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`approve leave (?P<leave_id>\d+)`, c.run),
-		),
+		matcher.NewRegexpMatcher(`approve leave (?P<leave_id>\d+)`, c.run),
+		true,
 	)
 }
 
@@ -41,6 +40,7 @@ func (c *leaveApproveCommand) run(match matcher.Result, message msg.Message) {
 		)
 		return
 	}
+	c.SlackClient.AddReaction("✅", message)
 	c.SlackClient.SendMessage(message, "Successfully appoved leave request.")
 }
 

@@ -1,12 +1,14 @@
 package bot
 
 import (
+	"sync"
+
+	"github.com/davecgh/go-spew/spew"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/db"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
-	"sync"
 )
 
 var interactionLock sync.Mutex
@@ -51,7 +53,9 @@ func (b *Bot) handleEvent(eventsAPIEvent slackevents.EventsAPIEvent) {
 }
 
 func (b *Bot) handleInteraction(payload slack.InteractionCallback) bool {
-	if !b.allowedUsers.Contains(payload.User.ID) {
+	user := &db.User{}
+	spew.Dump(payload.User)
+	if err := b.DB.Debug().Model(&db.User{}).Where("id = ?", payload.User.ID).First(user).Error; err != nil {
 		log.Warnf("User %s tried to execute a command", payload.User.ID)
 		return false
 	}

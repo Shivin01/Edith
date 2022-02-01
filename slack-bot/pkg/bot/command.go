@@ -1,12 +1,13 @@
 package bot
 
 import (
+	"sync"
+
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/db"
-	"sync"
 )
 
 var lock sync.Mutex

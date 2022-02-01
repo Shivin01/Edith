@@ -3,6 +3,10 @@ package jenkins
 import (
 	"context"
 	"fmt"
+	"sync"
+	"time"
+
+	"github.com/bndr/gojenkins"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
@@ -10,10 +14,6 @@ import (
 	"github.com/immanoj16/edith/pkg/config"
 	"github.com/immanoj16/edith/pkg/db"
 	"github.com/pkg/errors"
-	"sync"
-	"time"
-
-	"github.com/bndr/gojenkins"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 )

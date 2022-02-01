@@ -2,6 +2,9 @@ package queue
 
 import (
 	"fmt"
+	"text/template"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -9,8 +12,6 @@ import (
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/db"
 	"github.com/slack-go/slack"
-	"text/template"
-	"time"
 )
 
 const processingReaction = "eyes"
@@ -35,6 +36,7 @@ func (c *listCommand) GetMatcher() matcher.Matcher {
 			matcher.NewTextMatcher("list queue", c.listAll),
 			matcher.NewTextMatcher("list queue in channel", c.listChannel),
 		),
+		false,
 	)
 }
 

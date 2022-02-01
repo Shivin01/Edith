@@ -3,6 +3,7 @@ package edith
 import (
 	"context"
 	"fmt"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -23,12 +24,10 @@ type makeAnnouncementCommand struct {
 }
 
 func (c *makeAnnouncementCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`make announcement (?P<type>[\w\-_\\/]+) (?P<details>[\w\-_\\/]+)`, c.run),
-		),
+		matcher.NewRegexpMatcher(`make announcement (?P<type>[\w\-_\\/]+) (?P<details>[\w\-_\\/]+)`, c.run),
+		true,
 	)
 }
 
@@ -50,6 +49,7 @@ func (c *makeAnnouncementCommand) run(match matcher.Result, message msg.Message)
 	}
 	c.SlackClient.SendMessage(message, "Successfully added response, users will see in #devops channel.")
 	channelID, _ := client.GetChannelIDAndName("#devops")
+	c.SlackClient.AddReaction("✅", message)
 	c.SlackClient.NewPostMessage(message, channelID, fmt.Sprintf(":tada: *New Announcement by* _%s_ :tada:\n\n*Type:* %s\n*Details:* %s\n", message.DBUser.FullName, res.Type, res.Detail))
 }
 

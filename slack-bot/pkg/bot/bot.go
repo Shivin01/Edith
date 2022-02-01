@@ -2,15 +2,15 @@ package bot
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/config"
 	"github.com/immanoj16/edith/pkg/db"
-	"regexp"
-	"strings"
-	"time"
-
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
@@ -217,7 +217,9 @@ func (b *Bot) ProcessMessage(message msg.Message, fromUserContext bool) {
 	}
 
 	var isAuthenticated bool
-	if message.DBUser == nil {
+	if message.User == "cron" {
+		isAuthenticated = true
+	} else if message.DBUser == nil {
 		slackUser := b.slackClient.GetUserDetails(message.GetUser(), message)
 		isAuthenticated = slackUser.IsAdmin || slackUser.IsOwner
 	} else {

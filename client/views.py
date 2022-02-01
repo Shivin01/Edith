@@ -12,7 +12,8 @@ class ClientViewSet(viewsets.ModelViewSet):
     """
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = []
+    permission_classes = []
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):

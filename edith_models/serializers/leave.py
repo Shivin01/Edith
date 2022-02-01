@@ -42,9 +42,5 @@ class LeaveSerializer(BaseSerializer):
         return super(LeaveSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        print(instance.__dict__)
-        print(validated_data)
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        return instance
+        validated_data['approved_by'] = self.context['request'].user
+        return super(LeaveSerializer, self).update(instance, validated_data)

@@ -3,12 +3,15 @@ package edith
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/immanoj16/edith/pkg/client"
+	"github.com/immanoj16/edith/pkg/db"
 	"github.com/pkg/errors"
 	"github.com/slack-go/slack"
-	"strings"
 )
 
 // NewCelebrationsCommand is able to send a message to any user/channel
@@ -24,10 +27,25 @@ func (c *celebrationsCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("celebrations", c.run),
+		false,
 	)
 }
 
 func (c *celebrationsCommand) run(match matcher.Result, message msg.Message) {
+
+	if message.DBUser == nil {
+		user := &db.User{}
+		if err := c.DB.Debug().Model(&db.User{}).First(&user).Error; err != nil {
+			c.SlackClient.AddReaction("❌", message)
+			c.SlackClient.ReplyError(
+				message,
+				errors.New("sorry, error while getting user token to get celebrations."),
+			)
+			return
+		}
+		message.DBUser = user
+	}
+
 	celebrations, err := c.client.GetCelebrations(context.TODO(), message.DBUser.AccessToken)
 	if err != nil {
 		c.SlackClient.AddReaction("❌", message)
@@ -45,11 +63,9 @@ func (c *celebrationsCommand) run(match matcher.Result, message msg.Message) {
 	}
 
 	c.SlackClient.AddReaction("✅", message)
-	sections := make([]slack.Block, 0)
-	sections = append(sections, slack.NewSectionBlock(slack.NewTextBlockObject("mrkdwn", "*Celebrations*", false, false), nil, nil))
+
+	var fields [][]string
 	for _, user := range celebrations {
-		fieldSlice := make([]*slack.TextBlockObject, 0)
-		fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*ID:*\n%s", user.ID), false, false))
 		name := strings.Trim(user.FirstName, " ")
 		if user.MiddleName != "" {
 			name += fmt.Sprintf(" %s", user.MiddleName)
@@ -57,11 +73,38 @@ func (c *celebrationsCommand) run(match matcher.Result, message msg.Message) {
 		if user.LastName != "" {
 			name += fmt.Sprintf(" %s", user.LastName)
 		}
-		fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Full Name:*\n%s", name), false, false))
-		sections = append(sections, slack.NewSectionBlock(nil, fieldSlice, nil))
+
+		var field []string
+		switch user.Type {
+		case "anniversary":
+			field = append(field, fmt.Sprintf("_Happy anniversary!_ :tada:"))
+			break
+		case "birthday":
+			field = append(field, fmt.Sprintf("_Wishing you happy birthday_ :tada:"))
+			break
+		}
+
+		field = append(field, []string{
+			fmt.Sprintf("\t"),
+			fmt.Sprintf("*Full Name:*\t%s", name),
+			fmt.Sprintf("\t"),
+		}...)
+
+		fields = append(fields, field)
 	}
 
-	c.SlackClient.SendBlockMessage(message, sections)
+	headerSection := client.GetTextBlock("*Today's celebrations*")
+	blocks := make([]slack.Block, 0, len(fields)+1)
+	blocks = append(blocks, headerSection)
+	for _, elements := range fields {
+		textBlocks := make([]*slack.TextBlockObject, 0, len(elements))
+		for _, element := range elements {
+			textBlocks = append(textBlocks, slack.NewTextBlockObject("mrkdwn", element, false, false))
+		}
+		blocks = append(blocks, slack.NewSectionBlock(nil, textBlocks, nil))
+	}
+
+	c.SendBlockMessage(message, blocks)
 }
 
 func (c *celebrationsCommand) GetHelp() []bot.Help {

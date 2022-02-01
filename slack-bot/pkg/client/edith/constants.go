@@ -12,7 +12,7 @@ const (
 	getMinimalUsers  = "/employees/minimal_info/"
 	addUser          = "/rest-auth/registration/"
 	markAttendance   = "/employees/employee_attendance/"
-	getHolidayList   = "/client/holiday_list/"
+	getHolidayList   = "/clients/holiday_list/"
 	getNewsFeed      = "/announcements/news_feed/"
 	getCelebrations  = "/announcements/celebration/"
 	requestLeave     = "/employees/leave/"
@@ -20,6 +20,8 @@ const (
 	makeAnnouncement = "/announcements/announcement/"
 	deleteEmployee   = "/employees/admin/"
 	adminLeave       = "/employees/admin_leave/"
+	clientList       = "/clients/client/"
+	modifyEmployee   = "/employees/admin/"
 )
 
 type tokenResponse struct {
@@ -73,15 +75,21 @@ func (u *UserResponse) GetDesignation() string {
 }
 
 type AddUserRequest struct {
-	Username    string
-	FirstName   string
-	MiddleName  string
-	LastName    string
-	Password    string
-	Skills      []string
-	PhoneNumber string
-	Email       string
-	SlackID     string
+	Username    string   `json:"username"`
+	FirstName   string   `json:"first_name"`
+	MiddleName  string   `json:"middle_name"`
+	LastName    string   `json:"last_name"`
+	Password    string   `json:"password"`
+	Password1   string   `json:"password1"`
+	Password2   string   `json:"password2"`
+	Skills      []string `json:"skills"`
+	PhoneNumber string   `json:"phone_number"`
+	Email       string   `json:"email"`
+	SlackID     string   `json:"slack_id"`
+	Designation string   `json:"designation"`
+	JoiningDate string   `json:"joining_date"`
+	ClientName  string   `json:"client_name"`
+	Gender      string   `json:"gender"`
 }
 
 type AddUserResponse struct {
@@ -118,6 +126,8 @@ type celebrationResponse struct {
 	MiddleName string `json:"middle_name"`
 	LastName   string `json:"last_name"`
 	ID         int    `json:"id"`
+	Type       string `json:"type"`
+	Gender     string `json:"gender"`
 }
 
 type LeaveRequest struct {
@@ -165,4 +175,16 @@ type AnnouncementResponse struct {
 		LastName   string `json:"last_name"`
 	} `json:"employee"`
 	Client int `json:"client"`
+}
+
+type AddClientRequest struct {
+	Name              string `json:"name"`
+	RegisteredName    string `json:"registered_name"`
+	LeaveCount        int    `json:"leave_count"`
+	NoticePeriodCount int    `json:"notice_period_count"`
+}
+
+type AddClientResponse struct {
+	defaultResponse
+	AddClientRequest
 }

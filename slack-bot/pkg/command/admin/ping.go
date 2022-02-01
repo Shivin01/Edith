@@ -2,11 +2,12 @@ package admin
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
-	"time"
 )
 
 // newPingCommand just prints a PING with the needed time from client->slack->edith server

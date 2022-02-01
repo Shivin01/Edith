@@ -2,18 +2,20 @@ package cron
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/bot/util"
-	"strings"
-	"time"
 )
 
 func (c *command) GetMatcher() matcher.Matcher {
-	return matcher.NewAuthorizedMatcher(
+	return matcher.NewAdminMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("list crons", c.ListCrons),
+		false,
 	)
 }
 

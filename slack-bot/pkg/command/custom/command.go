@@ -29,6 +29,7 @@ func (c *command) GetMatcher() matcher.Matcher {
 			matcher.NewRegexpMatcher("(delete|remove) command '?(?P<alias>.*?)'?", c.delete),
 			matcher.NewTextMatcher("list commands", c.list),
 		),
+		true,
 	)
 }
 

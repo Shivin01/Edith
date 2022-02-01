@@ -3,12 +3,15 @@ package edith
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/immanoj16/edith/pkg/client"
+	"github.com/immanoj16/edith/pkg/db"
 	"github.com/pkg/errors"
 	"github.com/slack-go/slack"
-	"strings"
 )
 
 // NewNewsFeedCommand is able to send a message to any user/channel
@@ -24,10 +27,23 @@ func (c *newsFeedCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("newsfeed", c.run),
+		false,
 	)
 }
 
 func (c *newsFeedCommand) run(match matcher.Result, message msg.Message) {
+	if message.DBUser == nil {
+		user := &db.User{}
+		if err := c.DB.Debug().Model(&db.User{}).First(&user).Error; err != nil {
+			c.SlackClient.AddReaction("❌", message)
+			c.SlackClient.ReplyError(
+				message,
+				errors.New("sorry, error while getting user token to get celebrations."),
+			)
+			return
+		}
+		message.DBUser = user
+	}
 	newsFeeds, err := c.client.GetNewsFeeds(context.TODO(), message.DBUser.AccessToken)
 	if err != nil {
 		c.SlackClient.AddReaction("❌", message)
@@ -40,16 +56,12 @@ func (c *newsFeedCommand) run(match matcher.Result, message msg.Message) {
 
 	if len(newsFeeds) == 0 {
 		c.SlackClient.AddReaction("✅", message)
-		c.SlackClient.SendMessage(message, "there are no newsfeeds at the moment, I will notify you if there any, thank you.")
+		c.SlackClient.SendMessage(message, "there are no newsfeeds at the moment, I will notify you if there any.")
 		return
 	}
 
-	c.SlackClient.AddReaction("✅", message)
-	sections := make([]slack.Block, 0)
-	sections = append(sections, slack.NewSectionBlock(slack.NewTextBlockObject("mrkdwn", "*News Feed*", false, false), nil, nil))
+	var fields [][]string
 	for _, user := range newsFeeds {
-		fieldSlice := make([]*slack.TextBlockObject, 0)
-		fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*ID:*\n%s", user.ID), false, false))
 		name := strings.Trim(user.FirstName, " ")
 		if user.MiddleName != "" {
 			name += fmt.Sprintf(" %s", user.MiddleName)
@@ -57,12 +69,30 @@ func (c *newsFeedCommand) run(match matcher.Result, message msg.Message) {
 		if user.LastName != "" {
 			name += fmt.Sprintf(" %s", user.LastName)
 		}
-		fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Full Name:*\n%s", name), false, false))
-		fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Designation:*\n%s", user.Designation), false, false))
-		sections = append(sections, slack.NewSectionBlock(nil, fieldSlice, nil))
+
+		fields = append(fields, []string{
+			fmt.Sprintf("_Welcome to our new joiner_ :tada:"),
+			fmt.Sprintf("\t"),
+			fmt.Sprintf("*Joining Date:*\t%s", user.JoiningDate),
+			fmt.Sprintf("\t"),
+			fmt.Sprintf("*Full Name:*\t%s", name),
+			fmt.Sprintf("\t"),
+			fmt.Sprintf("*Designation:*\t%s", user.Designation),
+		})
 	}
 
-	c.SlackClient.SendBlockMessage(message, sections)
+	headerSection := client.GetTextBlock("*Feed*")
+	blocks := make([]slack.Block, 0, len(fields)+1)
+	blocks = append(blocks, headerSection)
+	for _, elements := range fields {
+		textBlocks := make([]*slack.TextBlockObject, 0, len(elements))
+		for _, element := range elements {
+			textBlocks = append(textBlocks, slack.NewTextBlockObject("mrkdwn", element, false, false))
+		}
+		blocks = append(blocks, slack.NewSectionBlock(nil, textBlocks, nil))
+	}
+
+	c.SendBlockMessage(message, blocks)
 }
 
 func (c *newsFeedCommand) GetHelp() []bot.Help {

@@ -1,10 +1,11 @@
 package msg
 
 import (
-	"github.com/immanoj16/edith/pkg/db"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/immanoj16/edith/pkg/db"
 )
 
 // Ref is the context of a message: the author, channel, timestamp etc
@@ -18,6 +19,7 @@ type Ref interface {
 	WithText(text string) Message
 	GetUniqueKey() string
 	GetDBUser() *db.User
+	IsAdminMessage() bool
 }
 
 // MessageRef is holds meta information for an message, like author, creation date or channel
@@ -29,6 +31,7 @@ type MessageRef struct {
 	InternalMessage bool   `json:"InternalMessage,omitempty"`
 	UpdatedMessage  bool   `json:"updated,omitempty"`
 	DBUser          *db.User
+	AdminMessage    bool
 }
 
 // GetChannel returns the channel id (usually starting with "C") of the current message
@@ -96,4 +99,9 @@ func (msg MessageRef) WithText(text string) Message {
 // GetDBUser returns current user
 func (msg MessageRef) GetDBUser() *db.User {
 	return msg.DBUser
+}
+
+// IsAdminMessage returns if the message is for admin users
+func (msg MessageRef) IsAdminMessage() bool {
+	return msg.AdminMessage
 }

@@ -8,8 +8,6 @@ This Slack bot improves the workflow of development teams. Especially with focus
 2. Select "From an app manifest"
 3. Select your Workspace
 4. Paste this Yaml code:
-<details>
-    <summary>Click to expand!</summary>
 
 ```yaml
 _metadata:
@@ -47,7 +45,6 @@ settings:
   org_deploy_enabled: false
   socket_mode_enabled: true
 ```
-</details>
 
 5. Create the App!
 6. Go to "Basic Information"

@@ -1,19 +1,19 @@
 package queue
 
 import (
+	"strings"
+	"sync"
+
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/db"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
-	"strings"
-	"sync"
 )
 
 const (
-	waitIcon   = "coffee"
-	doneIcon   = "white_check_mark"
-	storageKey = "fallback_queue"
+	waitIcon = "coffee"
+	doneIcon = "white_check_mark"
 )
 
 var mu sync.RWMutex

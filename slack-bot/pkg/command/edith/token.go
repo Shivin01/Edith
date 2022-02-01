@@ -2,6 +2,7 @@ package edith
 
 import (
 	"context"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -20,12 +21,10 @@ type tokenCommand struct {
 }
 
 func (c *tokenCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`token (?P<user>[\w\-_\\/]+) (?P<password>[\w\-_\\/!@#\$%\^\&*\)\(+=\.]+)`, c.run),
-		),
+		matcher.NewRegexpMatcher(`token (?P<user>[\w\-_\\/]+) (?P<password>[\w\-_\\/!@#\$%\^\&*\)\(+=\.]+)`, c.run),
+		true,
 	)
 }
 

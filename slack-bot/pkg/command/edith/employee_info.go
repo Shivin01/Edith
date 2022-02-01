@@ -3,14 +3,16 @@ package edith
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/client/edith"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
-	"strings"
 )
 
 // newPingCommand just prints a PING with the needed time from client->slack->edith server
@@ -25,12 +27,10 @@ type employeeInfoCommand struct {
 }
 
 func (c *employeeInfoCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`show info <@(?P<user>[\w\-_\\/]+)>`, c.run),
-		),
+		matcher.NewRegexpMatcher(`show info <@(?P<user>[\w\-_\\/]+)>`, c.run),
+		true,
 	)
 }
 
@@ -74,11 +74,7 @@ func (c *employeeInfoCommand) run(match matcher.Result, message msg.Message) {
 	}
 
 	user := users[0]
-	sections := make([]slack.Block, 0)
-	sections = append(sections, slack.NewSectionBlock(slack.NewTextBlockObject("mrkdwn", "*User Information*", false, false), nil, nil))
-	fieldSlice := make([]*slack.TextBlockObject, 0)
-	fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*ID:*\n%s", user.SlackID), false, false))
-	fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Username:*\n%s", user.Username), false, false))
+
 	name := strings.Trim(user.FirstName, " ")
 	if user.MiddleName != "" {
 		name += fmt.Sprintf(" %s", user.MiddleName)
@@ -86,11 +82,29 @@ func (c *employeeInfoCommand) run(match matcher.Result, message msg.Message) {
 	if user.LastName != "" {
 		name += fmt.Sprintf(" %s", user.LastName)
 	}
-	fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Full Name:*\n%s", name), false, false))
-	fieldSlice = append(fieldSlice, slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Designation:*\n%s", user.Designation), false, false))
-	sections = append(sections, slack.NewSectionBlock(nil, fieldSlice, nil))
 
-	c.SlackClient.SendBlockMessage(message, sections)
+	var fields [][]string
+	fields = append(fields, []string{
+		fmt.Sprintf("*ID:*\t%s", user.SlackID),
+		fmt.Sprintf("\t"),
+		fmt.Sprintf("*Username:*\t%s", user.Username),
+		fmt.Sprintf("\t"),
+		fmt.Sprintf("*Full Name:*\t%s", name),
+		fmt.Sprintf("\t"),
+		fmt.Sprintf("*Designation:*\t%s", user.Designation),
+	})
+	headerSection := client.GetTextBlock("*User Information*")
+	blocks := make([]slack.Block, 0, len(fields)+1)
+	blocks = append(blocks, headerSection)
+	for _, elements := range fields {
+		textBlocks := make([]*slack.TextBlockObject, 0, len(elements))
+		for _, element := range elements {
+			textBlocks = append(textBlocks, slack.NewTextBlockObject("mrkdwn", element, false, false))
+		}
+		blocks = append(blocks, slack.NewSectionBlock(nil, textBlocks, nil))
+	}
+
+	c.SendBlockMessage(message, blocks)
 }
 
 func (c *employeeInfoCommand) GetHelp() []bot.Help {

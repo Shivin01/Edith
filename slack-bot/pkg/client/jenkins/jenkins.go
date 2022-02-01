@@ -2,12 +2,12 @@ package jenkins
 
 import (
 	"context"
-	"github.com/immanoj16/edith/pkg/bot/msg"
-	"github.com/immanoj16/edith/pkg/bot/util"
-	"github.com/immanoj16/edith/pkg/client"
 	"time"
 
 	"github.com/bndr/gojenkins"
+	"github.com/immanoj16/edith/pkg/bot/msg"
+	"github.com/immanoj16/edith/pkg/bot/util"
+	"github.com/immanoj16/edith/pkg/client"
 	log "github.com/sirupsen/logrus"
 )
 

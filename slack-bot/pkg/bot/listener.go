@@ -1,15 +1,16 @@
 package bot
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/immanoj16/edith/pkg/bot/util"
 	"github.com/immanoj16/edith/pkg/client"
 	log "github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"github.com/slack-go/slack/socketmode"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 // Run is blocking method to handle new incoming events...from different sources

@@ -3,12 +3,13 @@ package admin
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/config"
-	"os"
-	"strings"
 )
 
 const logChars = 4000
@@ -30,6 +31,7 @@ func (c *botLogCommand) GetMatcher() matcher.Matcher {
 	return matcher.NewAdminMatcher(
 		c.SlackClient,
 		matcher.NewTextMatcher("edith log", c.showBotLog),
+		false,
 	)
 }
 

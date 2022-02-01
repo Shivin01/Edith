@@ -18,18 +18,20 @@ type getToken struct {
 }
 
 func (c *getToken) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewAuthorizedMatcher(
 		c.SlackClient,
-		matcher.NewAuthorizedMatcher(
-			c.SlackClient,
-			matcher.NewTextMatcher("get token", c.run),
-		),
+		matcher.NewTextMatcher("get token", c.run),
+		true,
 	)
 }
 
 func (c *getToken) run(match matcher.Result, message msg.Message) {
 	c.SlackClient.AddReaction("✅", message)
 	c.SlackClient.SendMessage(message, message.DBUser.AccessToken)
+}
+
+func (c *getToken) IsEnabled() bool {
+	return false
 }
 
 func (c *getToken) GetHelp() []bot.Help {

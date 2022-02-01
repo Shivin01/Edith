@@ -2,8 +2,9 @@ package util
 
 import (
 	"bytes"
-	"github.com/immanoj16/edith/pkg/db"
 	"text/template"
+
+	"github.com/immanoj16/edith/pkg/db"
 )
 
 // TemplateFunctionProvider can be provided by Commands to register template functions to the internal parser.

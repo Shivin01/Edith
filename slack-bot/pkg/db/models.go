@@ -4,6 +4,15 @@ import (
 	"gorm.io/gorm"
 )
 
+type Client struct {
+	gorm.Model
+	ServerID          int    `gorm:"server_id"`
+	Name              string `gorm:"name"`
+	RegisteredName    string `gorm:"registered_name"`
+	LeaveCount        int    `gorm:"leave_count"`
+	NoticePeriodCount int    `gorm:"notice_period_count"`
+}
+
 type User struct {
 	ID              string           `gorm:"id:primaryKey"`
 	ServerID        int              `gorm:"server_id"`
@@ -13,6 +22,8 @@ type User struct {
 	Designation     string           `gorm:"designation"`
 	CustomVariables []CustomVariable `gorm:"foreignKey:UserRefer"`
 	CustomCommands  []CustomCommand  `gorm:"foreignKey:UserRefer"`
+	ClientName      string           `gorm:"client_name"`
+	Gender          string           `gorm:"gender"`
 }
 
 func (u *User) GetSlackID() string {

@@ -1,7 +1,9 @@
 package edith
 
 import (
+	"context"
 	"fmt"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
@@ -21,59 +23,131 @@ type modifyUserCommand struct {
 }
 
 func (c *modifyUserCommand) GetMatcher() matcher.Matcher {
-	return matcher.NewPrivateMatcher(
+	return matcher.NewManagerMatcher(
 		c.SlackClient,
-		matcher.NewManagerMatcher(
-			c.SlackClient,
-			matcher.NewRegexpMatcher(`modify user (?P<designation>hr|admin|dev|manager)`, c.run),
+		matcher.NewGroupMatcher(
+			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> designation (?P<designation>hr|admin|dev|manager)`, c.modifyDesignation),
+			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> birthdate (?P<date>\d{4}-\d{2}-\d{2})`, c.modifyBirthDate),
+			matcher.NewRegexpMatcher(`modify user <@(?P<user>[\w\-_\\/]+)> client (?P<name>[\w\-_\\/]+)`, c.modifyClient),
 		),
+		true,
 	)
 }
 
-func (c *modifyUserCommand) run(match matcher.Result, message msg.Message) {
-	designation := match.GetString("designation")
-	//request := &edith.AddUserRequest{
-	//	Username:    user.Profile.DisplayName,
-	//	FirstName:   user.Profile.FirstName,
-	//	LastName:    user.Profile.LastName,
-	//	Password:    "admin@123",
-	//	PhoneNumber: user.Profile.Phone,
-	//	Skills:      []string{},
-	//	SlackID:     user.ID,
-	//	Email:       fmt.Sprintf("%s@gmail.com", user.Profile.DisplayName),
-	//}
-	//
-	//response, err := c.client.AddUser(context.TODO(), request)
-	//if err != nil {
-	//	c.SlackClient.AddReaction("❌", message)
-	//	c.SlackClient.ReplyError(
-	//		message,
-	//		errors.New("sorry, error while creating user"),
-	//	)
-	//	return
-	//}
+func (c *modifyUserCommand) modifyClient(match matcher.Result, message msg.Message) {
+	user := match.GetString("user")
+	clientName := match.GetString("name")
 
-	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", message.DBUser.ID).Update("designation", designation).Error; err != nil {
+	u := &db.User{}
+	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).First(u).Error; err != nil {
+		message.DBUser = nil
+	}
+
+	err := c.client.ModifyUser(context.TODO(), u.ServerID, map[string]interface{}{
+		"client_name": clientName,
+	}, message.DBUser.AccessToken)
+	if err != nil {
 		c.SlackClient.AddReaction("❌", message)
 		c.SlackClient.ReplyError(
 			message,
-			errors.New("sorry, error while saving user to database."),
+			errors.New("sorry, error while creating user"),
+		)
+		return
+	}
+
+	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).Update("client_name", clientName).Error; err != nil {
+		c.SlackClient.AddReaction("❌", message)
+		c.SlackClient.ReplyError(
+			message,
+			errors.New("sorry, error while updating user to database."),
 		)
 		return
 	}
 	c.SlackClient.AddReaction("✅", message)
-	c.SlackClient.SendMessage(message, fmt.Sprintf("updated user %s", message.DBUser.Username))
+	c.SlackClient.SendMessage(message, fmt.Sprintf("updated user %s", user))
+}
+
+func (c *modifyUserCommand) modifyBirthDate(match matcher.Result, message msg.Message) {
+	user := match.GetString("user")
+	date := match.GetString("date")
+
+	u := &db.User{}
+	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).First(u).Error; err != nil {
+		message.DBUser = nil
+	}
+
+	err := c.client.ModifyUser(context.TODO(), u.ServerID, map[string]interface{}{
+		"birth_date": date,
+	}, message.DBUser.AccessToken)
+	if err != nil {
+		c.SlackClient.AddReaction("❌", message)
+		c.SlackClient.ReplyError(
+			message,
+			errors.New("sorry, error while creating user"),
+		)
+		return
+	}
+
+	c.SlackClient.AddReaction("✅", message)
+	c.SlackClient.SendMessage(message, fmt.Sprintf("updated user %s", u.Username))
+}
+
+func (c *modifyUserCommand) modifyDesignation(match matcher.Result, message msg.Message) {
+	user := match.GetString("user")
+	designation := match.GetString("designation")
+
+	u := &db.User{}
+	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).First(u).Error; err != nil {
+		message.DBUser = nil
+	}
+
+	err := c.client.ModifyUser(context.TODO(), u.ServerID, map[string]interface{}{
+		"designation": designation,
+	}, message.DBUser.AccessToken)
+	if err != nil {
+		c.SlackClient.AddReaction("❌", message)
+		c.SlackClient.ReplyError(
+			message,
+			errors.New("sorry, error while creating user"),
+		)
+		return
+	}
+
+	if err := c.DB.Debug().Model(&db.User{}).Where("ID = ?", user).Update("designation", designation).Error; err != nil {
+		c.SlackClient.AddReaction("❌", message)
+		c.SlackClient.ReplyError(
+			message,
+			errors.New("sorry, error while updating user to database."),
+		)
+		return
+	}
+	c.SlackClient.AddReaction("✅", message)
+	c.SlackClient.SendMessage(message, fmt.Sprintf("updated user %s", u.GetRealName()))
 }
 
 func (c *modifyUserCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "modify user @username hr|sales|dev|admin",
+			Command:     "modify user @username designation @username hr|sales|dev|admin",
 			Description: "modify existing user",
 			Examples: []string{
-				"modify user @jarvis dev",
-				"modify user @jarvis sales",
-				"modify user @jarvis hr",
+				"modify user @jarvis designation sales",
+			},
+			Category: category,
+		},
+		{
+			Command:     "modify user @username client <client_name>",
+			Description: "modify existing user",
+			Examples: []string{
+				"modify user @jarvis client newclient",
+			},
+			Category: category,
+		},
+		{
+			Command:     "modify user @username birthdate <birthdate>",
+			Description: "modify existing user",
+			Examples: []string{
+				"modify user @jarvis birthdate 1995-04-20",
 			},
 			Category: category,
 		},

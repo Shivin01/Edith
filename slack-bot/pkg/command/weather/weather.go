@@ -3,14 +3,14 @@ package weather
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"time"
+
 	"github.com/immanoj16/edith/pkg/bot"
 	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/client"
 	"github.com/immanoj16/edith/pkg/config"
-	"net/url"
-	"time"
-
 	"github.com/pkg/errors"
 	"github.com/slack-go/slack"
 )

@@ -1,8 +1,9 @@
 package matcher
 
 import (
-	"github.com/immanoj16/edith/pkg/bot/msg"
 	"strings"
+
+	"github.com/immanoj16/edith/pkg/bot/msg"
 )
 
 // NewTextMatcher match messages by full text (case insensitive)

@@ -77,7 +77,7 @@ class LeaveViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         employees = Employee.objects.filter(client=self.request.user.client)
-        return Leave.objects.filter(employee__in=[employee.id for employee in employees], approved_by=not None)
+        return Leave.objects.filter(employee__in=[employee.id for employee in employees]).exclude(approved_by=None)
 
 
 class BonusViewSet(viewsets.ModelViewSet):
@@ -184,14 +184,3 @@ class LeaveApprovalViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         employees = Employee.objects.filter(client=self.request.user.client)
         return Leave.objects.filter(employee__in=[employee.id for employee in employees], approved_by=None)
-
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        print(instance.__dict__)
-        if instance.approved_by:
-            return Response(self.get_serializer(instance))
-        request.data['approved_by'] = request.user.id
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)

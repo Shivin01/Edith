@@ -3,12 +3,13 @@ package jenkins
 import (
 	"context"
 	"fmt"
+	"sort"
+
 	"github.com/bndr/gojenkins"
 	"github.com/immanoj16/edith/pkg/bot"
-	matcher2 "github.com/immanoj16/edith/pkg/bot/matcher"
+	"github.com/immanoj16/edith/pkg/bot/matcher"
 	"github.com/immanoj16/edith/pkg/bot/msg"
 	"github.com/immanoj16/edith/pkg/config"
-	"sort"
 )
 
 const (
@@ -26,15 +27,15 @@ func newNodesCommand(base jenkinsCommand, cfg config.Jenkins) bot.Command {
 	return &nodesCommand{base, cfg}
 }
 
-func (c *nodesCommand) GetMatcher() matcher2.Matcher {
-	return matcher2.NewTextMatcher("jenkins nodes", c.run)
+func (c *nodesCommand) GetMatcher() matcher.Matcher {
+	return matcher.NewTextMatcher("jenkins nodes", c.run)
 }
 
 func (c *nodesCommand) IsEnabled() bool {
 	return c.jenkins != nil
 }
 
-func (c *nodesCommand) run(match matcher2.Result, message msg.Message) {
+func (c *nodesCommand) run(match matcher.Result, message msg.Message) {
 	ctx := context.TODO()
 	nodes, err := c.jenkins.GetAllNodes(ctx)
 	if err != nil {
