@@ -1,12 +1,12 @@
 slack:
-  token: xoxb-2928575696436-2982197883351-bIIeeccA64DK4oGXVErxqdcZ
-  socket_token: xapp-1-A030LFTMK0Q-3040480516945-51af40a4b554fb3fad51f192e14a4a3820cc135e60055731b78e031c96222494
+  token: xoxb-3040372380436-3038082325986-fytO5EfTrCDseIXRtu1fBvDM
+  socket_token: xapp-1-A03143484QK-3035174483685-368fd90531a773f42193fe12fcd7f4f6f37bd6daa889dd724a16f3f40c458cd6
   debug: true
 
 jenkins:
   host: "http://localhost:8080"
-  username: admin
-  password: admin
+  username: shivin  
+  password: shivin
   jobs:
     test:
       parameters:
