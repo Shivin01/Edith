@@ -78,11 +78,10 @@ func (c *listUserCommand) getLocalUsers(match matcher.Result, message msg.Messag
 func (c *listUserCommand) GetHelp() []bot.Help {
 	return []bot.Help{
 		{
-			Command:     "list users <local|server>",
+			Command:     "list users",
 			Description: "list users",
 			Examples: []string{
-				"list users local",
-				"list users server",
+				"list users",
 			},
 			Category: category,
 		},
